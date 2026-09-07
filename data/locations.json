@@ -1,0 +1,66 @@
+[
+  {
+    "id": "L01",
+    "name": "Human-Robot Interaction Laboratory",
+    "description": "The main development and testing laboratory for ReMotion.",
+    "contains": [
+      "ReMotion robot",
+      "Operator workstation",
+      "Sensor gateway",
+      "Emergency-stop system",
+      "Diagnostic terminal"
+    ]
+  },
+  {
+    "id": "L02",
+    "name": "Calibration Bay",
+    "description": "A restricted area used for automated calibration and safety testing. The morning failure occurred here.",
+    "contains": [
+      "Calibration rig",
+      "Safety interlocks",
+      "Profile-loading terminal"
+    ]
+  },
+  {
+    "id": "L03",
+    "name": "Immersive Systems Studio",
+    "description": "Nova Byte's VR and motion-tracking laboratory.",
+    "contains": [
+      "VR headsets",
+      "Depth cameras",
+      "Motion-capture equipment",
+      "Locked media cabinet"
+    ]
+  },
+  {
+    "id": "L04",
+    "name": "Infrastructure Operations Room",
+    "description": "Root Harbor's server and deployment workspace.",
+    "contains": [
+      "Deployment terminals",
+      "Monitoring systems",
+      "Backup controls",
+      "Emergency maintenance documentation"
+    ]
+  },
+  {
+    "id": "L05",
+    "name": "Equipment Storage",
+    "description": "Secured storage for cameras, sensors, cables, and replacement components. The supposedly missing depth camera should have been returned here.",
+    "contains": [
+      "Camera shelving",
+      "Sensor cabinets",
+      "Checkout log terminal"
+    ]
+  },
+  {
+    "id": "L06",
+    "name": "Innovation Hall",
+    "description": "The planned location of the public demonstration. The robot was supposed to be moved here after the morning calibration test.",
+    "contains": [
+      "Demonstration stage",
+      "Audience seating",
+      "Presentation equipment"
+    ]
+  }
+]

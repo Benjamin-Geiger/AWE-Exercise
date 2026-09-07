@@ -1,0 +1,91 @@
+[
+  {
+    "id": "signal-scholar",
+    "name": "Signal Scholar",
+    "role": "Director of the Research Centre",
+    "speciality": "IoT systems and connected-device architecture",
+    "responsibilities": [
+      "Overall project leadership",
+      "Connected-device architecture",
+      "External project partners",
+      "Demonstration approval"
+    ],
+    "statement": "We had a public commitment to demonstrate ReMotion. Patch raised a theoretical concern about cached calibration profiles, but every system passed its pre-release checks. I made the call to proceed because delaying again would have jeopardised the partnership funding.",
+    "background": "Signal insisted that the public demonstration proceed despite unresolved safety concerns raised earlier in the week. He did not sabotage the robot, but he placed the team under significant deadline pressure and overruled a recommendation to postpone.",
+    "avatar": "assets/people/signal-scholar.png"
+  },
+  {
+    "id": "kernel-colt",
+    "name": "Kernel Colt",
+    "role": "Legacy Systems Engineer",
+    "speciality": "Old operating environments, embedded systems, and unusual legacy tools",
+    "responsibilities": [
+      "Motor controller",
+      "Embedded interfaces",
+      "Legacy diagnostic software"
+    ],
+    "statement": "I installed the approved MCU-BRIDGE-4.7 compatibility patch like I was asked to. I did not touch any calibration values, only the controller firmware bridge. My diagnostic rig still thinks it's 2024 half the time, don't read too much into the timestamps.",
+    "background": "Kernel installed an approved compatibility patch shortly before the failure. His diagnostic software generated confusing timestamps, and a controller flash log shows a write operation that his own statement does not fully account for.",
+    "avatar": "assets/people/kernel-colt.png"
+  },
+  {
+    "id": "nova-byte",
+    "name": "Nova Byte",
+    "role": "Immersive Systems & VR Specialist",
+    "speciality": "Virtual reality, depth sensing, and motion tracking",
+    "responsibilities": [
+      "VR rehabilitation exercises",
+      "Depth-camera integration",
+      "Movement visualization",
+      "Motion tracking"
+    ],
+    "statement": "I borrowed DC-04 for an alignment test in the studio. I told the team in chat, and I definitely brought it back before I left for the night.",
+    "background": "Nova borrowed a depth camera without completing the official checkout process. The camera was later reported missing, and the equipment-storage access log does not show a return visit matching her statement.",
+    "avatar": "assets/people/nova-byte.png"
+  },
+  {
+    "id": "patch-vector",
+    "name": "Patch Vector",
+    "role": "Software Quality Specialist",
+    "speciality": "Testing, code review, and release validation",
+    "responsibilities": [
+      "Testing",
+      "Code review",
+      "Debugging",
+      "Release validation"
+    ],
+    "statement": "I flagged the calibration-cache reuse risk days before the demonstration and recommended we postpone until it was fixed properly. I was overruled. I don't think anyone took the risk as seriously as they should have.",
+    "background": "Patch previously warned that calibration data might be incorrectly reused between robots and argued that the public demonstration should be postponed until the caching behaviour was fixed.",
+    "avatar": "assets/people/patch-vector.png"
+  },
+  {
+    "id": "refactor-rex",
+    "name": "Refactor Rex",
+    "role": "Game Developer & Legacy-Code Tamer",
+    "speciality": "Interactive simulation and dashboard interfaces",
+    "responsibilities": [
+      "Interactive rehabilitation exercises",
+      "Simulation interface",
+      "Browser-based operator dashboard"
+    ],
+    "statement": "Yeah, the left/right labels on the dashboard got flipped in my coordinate-conversion update. It's a display bug, the underlying values are fine. I'll patch it, but it has nothing to do with the calibration failure.",
+    "background": "Refactor introduced a left/right visualization defect in the dashboard during a coordinate-conversion update. The defect looks alarming on screen but only affects the user interface, not the robot's internal safety values.",
+    "avatar": "assets/people/refactor-rex.png"
+  },
+  {
+    "id": "root-harbor",
+    "name": "Root Harbor",
+    "role": "OS & Server Infrastructure Specialist",
+    "speciality": "Servers, deployment, service accounts, and monitoring",
+    "responsibilities": [
+      "Servers",
+      "Deployment infrastructure",
+      "Service accounts",
+      "Monitoring",
+      "Backups"
+    ],
+    "statement": "I ran the full migration overnight: backup, restart, cache warm-up, monitoring cut-over. Everything came back green. We had to bring up the shared svc-remotion maintenance account temporarily for the cutover, same as every migration.",
+    "background": "Root migrated the ReMotion services on the night before the demonstration. The migration produced a genuine caching problem and temporarily required a shared maintenance account, which makes it difficult to attribute overnight server activity to a single person.",
+    "avatar": "assets/people/root-harbor.png"
+  }
+]

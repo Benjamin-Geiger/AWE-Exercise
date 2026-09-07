@@ -1,0 +1,11 @@
+{
+  "caseId": "REMOTION-2026-10",
+  "title": "Project ReMotion – Investigation Portal",
+  "subtitle": "Investigate the failure of an AI-assisted rehabilitation robot.",
+  "status": "open",
+  "opened": "2026-10-16",
+  "summary": "The Research Center AI, Software and IT-Security of HCW was about to publicly demonstrate ReMotion, an AI-assisted rehabilitation robot, when it failed its automated calibration test on the morning of the event. ReMotion loaded a calibration profile belonging to another robot, detected movement limits it could not safely support, and triggered its emergency stop before any movement occurred. In the hours around the failure, the team also discovered a missing depth camera, an outdated dashboard build, a legacy motor-controller patch installed the night before, a production calibration service that doesn't match the approved release, and several logs with unexplained timestamps. As the investigator assigned to this case, it's your job to work through the evidence, people, locations, and timeline below to figure out what happened, which irregularities are connected, which were accidental, and whether the failure was deliberate — and if so, by whom.",
+  "location": "Research Center AI, Software and IT-Security of HCW",
+  "leadInvestigator": "Unassigned",
+  "notes": "This case file is a working document. New evidence may be added as the investigation continues."
+}

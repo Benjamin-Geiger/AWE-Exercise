@@ -1,0 +1,167 @@
+[
+  {
+    "id": "T01",
+    "time": "2026-10-13T10:05:00Z",
+    "title": "Patch raises a calibration-cache safety concern",
+    "description": "Patch Vector files a safety memo warning that calibration profiles might not be properly scoped per-robot in the cache layer.",
+    "type": "report",
+    "certainty": "confirmed",
+    "personIds": ["patch-vector"],
+    "locationIds": ["L01"],
+    "evidenceIds": ["E15"]
+  },
+  {
+    "id": "T02",
+    "time": "2026-10-13T14:40:00Z",
+    "title": "Signal rejects the recommendation to postpone",
+    "description": "Signal Scholar decides the demonstration will proceed as scheduled, logging the concern as a known risk.",
+    "type": "decision",
+    "certainty": "confirmed",
+    "personIds": ["signal-scholar", "patch-vector"],
+    "locationIds": ["L01"],
+    "evidenceIds": ["E16"]
+  },
+  {
+    "id": "T03",
+    "time": "2026-10-15T16:00:00Z",
+    "title": "Release 2.8.4 is approved",
+    "description": "Signal Scholar approves remotion-release-2.8.4 with a specific frontend and calibration-service hash.",
+    "type": "release",
+    "certainty": "confirmed",
+    "personIds": ["signal-scholar"],
+    "locationIds": ["L04"],
+    "evidenceIds": ["E12"]
+  },
+  {
+    "id": "T04",
+    "time": "2026-10-15T17:21:00Z",
+    "title": "Nova enters Equipment Storage",
+    "description": "Badge access log records Nova Byte entering and exiting Equipment Storage.",
+    "type": "access",
+    "certainty": "confirmed",
+    "personIds": ["nova-byte"],
+    "locationIds": ["L05"],
+    "evidenceIds": ["E06"]
+  },
+  {
+    "id": "T05",
+    "time": "2026-10-15T17:26:00Z",
+    "title": "Nova announces that she borrowed DC-04",
+    "description": "Nova posts in the team chat that she has taken depth camera DC-04 for an alignment test.",
+    "type": "communication",
+    "certainty": "reported",
+    "personIds": ["nova-byte"],
+    "locationIds": ["L03"],
+    "evidenceIds": ["E05"]
+  },
+  {
+    "id": "T06",
+    "time": "2026-10-15T18:12:00Z",
+    "title": "Refactor merges the coordinate-conversion update",
+    "description": "A commit changing dashboard coordinate conversion is merged, later found to swap left/right deviation labels.",
+    "type": "software-change",
+    "certainty": "confirmed",
+    "personIds": ["refactor-rex"],
+    "locationIds": ["L01"],
+    "evidenceIds": ["E09"]
+  },
+  {
+    "id": "T07",
+    "time": "2026-10-15T18:47:00Z",
+    "title": "The dashboard label defect is observed",
+    "description": "An operator notices the dashboard reporting 'right deviation' while the robot visibly moves left.",
+    "type": "observation",
+    "certainty": "contradictory",
+    "personIds": ["refactor-rex"],
+    "locationIds": ["L01"],
+    "evidenceIds": ["E10"]
+  },
+  {
+    "id": "T08",
+    "time": "2026-10-15T19:08:00Z",
+    "title": "Kernel installs the motor-controller patch",
+    "description": "Kernel Colt installs the approved MCU-BRIDGE-4.7 compatibility patch on the legacy motor controller.",
+    "type": "maintenance",
+    "certainty": "confirmed",
+    "personIds": ["kernel-colt"],
+    "locationIds": ["L01"],
+    "evidenceIds": ["E07", "E08"]
+  },
+  {
+    "id": "T09",
+    "time": "2026-10-15T20:00:00Z",
+    "title": "Root begins the infrastructure migration",
+    "description": "Root Harbor starts the overnight migration of ReMotion services, including a cache warm-up step.",
+    "type": "infrastructure",
+    "certainty": "confirmed",
+    "personIds": ["root-harbor"],
+    "locationIds": ["L04"],
+    "evidenceIds": ["E11"]
+  },
+  {
+    "id": "T10",
+    "time": "2026-10-15T23:30:00Z",
+    "title": "Root marks the migration complete",
+    "description": "The migration ticket is closed with all services reported healthy.",
+    "type": "infrastructure",
+    "certainty": "reported",
+    "personIds": ["root-harbor"],
+    "locationIds": ["L04"],
+    "evidenceIds": ["E11"]
+  },
+  {
+    "id": "T11",
+    "time": "2026-10-16T06:47:00Z",
+    "title": "ReMotion begins its morning startup",
+    "description": "REMOTION-01 begins its automated startup and calibration sequence ahead of the scheduled demonstration.",
+    "type": "system",
+    "certainty": "confirmed",
+    "personIds": [],
+    "locationIds": ["L02"],
+    "evidenceIds": ["E02"]
+  },
+  {
+    "id": "T12",
+    "time": "2026-10-16T06:48:00Z",
+    "title": "An incorrect calibration profile is returned",
+    "description": "The calibration-service returns the TRAINER-2 profile in response to ReMotion's request.",
+    "type": "system",
+    "certainty": "confirmed",
+    "personIds": [],
+    "locationIds": ["L02"],
+    "evidenceIds": ["E01", "E02", "E03"]
+  },
+  {
+    "id": "T13",
+    "time": "2026-10-16T06:49:00Z",
+    "title": "The emergency stop activates",
+    "description": "ReMotion's onboard safety controller rejects the mismatched profile and activates the emergency stop.",
+    "type": "system",
+    "certainty": "confirmed",
+    "personIds": [],
+    "locationIds": ["L02"],
+    "evidenceIds": ["E01", "E02"]
+  },
+  {
+    "id": "T14",
+    "time": "2026-10-16T07:03:00Z",
+    "title": "Camera DC-04 is reported missing",
+    "description": "Morning inventory finds depth camera DC-04 absent from Equipment Storage with no return recorded.",
+    "type": "incident",
+    "certainty": "confirmed",
+    "personIds": ["nova-byte"],
+    "locationIds": ["L05"],
+    "evidenceIds": ["E04"]
+  },
+  {
+    "id": "T15",
+    "time": "2026-10-16T07:25:00Z",
+    "title": "The public demonstration is cancelled",
+    "description": "With the calibration failure unresolved, Signal Scholar cancels the Innovation Hall demonstration.",
+    "type": "decision",
+    "certainty": "confirmed",
+    "personIds": ["signal-scholar"],
+    "locationIds": ["L06"],
+    "evidenceIds": ["E01"]
+  }
+]

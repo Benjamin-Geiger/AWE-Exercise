@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project ReMotion &ndash; Investigation Portal</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p id="loadingText">Loading case file&hellip;</p>
+  </div>
+</div>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="assets/logo/logo.svg" alt="Project ReMotion logo" class="brand-logo">
+      <div>
+        <h1>Project ReMotion</h1>
+        <p class="subtitle">Investigate the failure of an AI-assisted rehabilitation robot.</p>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <button type="button" class="nav-btn" data-view="dashboard" onclick="navigateTo('dashboard')">Dashboard</button>
+      <button type="button" class="nav-btn" data-view="evidence" onclick="navigateTo('evidence')">Evidence</button>
+      <button type="button" class="nav-btn" data-view="people" onclick="navigateTo('people')">People &amp; Locations</button>
+      <button type="button" class="nav-btn" data-view="timeline" onclick="navigateTo('timeline')">Timeline</button>
+      <button type="button" class="nav-btn" data-view="workspace" onclick="navigateTo('workspace')">Workspace</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app" class="app-main">
+
+  <!-- DASHBOARD VIEW -->
+  <section id="view-dashboard" class="view">
+    <h2>Case Dashboard</h2>
+
+
+
+    <div class="intro-card">
+      <h3>How to use this portal</h3>
+      <p>
+        Everything gathered on the case so far is organised into four working views. Use the
+        navigation bar at the top to move between them at any time.
+      </p>
+      <div class="howto-grid">
+        <div class="howto-item">
+          <h4>1. Evidence Catalogue</h4>
+          <p>Search, filter, and sort every evidence item. Open one for full details, related
+          people and locations, and to add a private note.</p>
+          <button type="button" class="btn btn-secondary btn-small" onclick="navigateTo('evidence')">Go to Evidence</button>
+        </div>
+        <div class="howto-item">
+          <h4>2. People &amp; Locations</h4>
+          <p>Read profiles and statements from the six team members involved, and look up the
+          six key locations in the investigation.</p>
+          <button type="button" class="btn btn-secondary btn-small" onclick="navigateTo('people')">Go to People &amp; Locations</button>
+        </div>
+        <div class="howto-item">
+          <h4>3. Timeline</h4>
+          <p>Walk through events in chronological order, filter by person, location, or type, and
+          jump straight to the evidence behind any event.</p>
+          <button type="button" class="btn btn-secondary btn-small" onclick="navigateTo('timeline')">Go to Timeline</button>
+        </div>
+        <div class="howto-item">
+          <h4>4. Investigator Workspace</h4>
+          <p>Your bookmarked evidence and notes collect here. Draft a hypothesis — who you
+          suspect, why, and how confident you are — it's saved automatically in your browser.</p>
+          <button type="button" class="btn btn-secondary btn-small" onclick="navigateTo('workspace')">Go to Workspace</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="dashboardContent">
+      <!-- rendered by app.js -->
+    </div>
+  </section>
+
+  <!-- EVIDENCE VIEW -->
+  <section id="view-evidence" class="view">
+    <h2>Evidence Catalogue</h2>
+
+    <div class="toolbar" id="evidenceToolbar">
+      <div class="toolbar-row">
+        <label for="evidenceSearch" class="visually-hidden">Search evidence</label>
+        <input type="text" id="evidenceSearch" placeholder="Search evidence by title, summary, or tag&hellip;" autocomplete="off">
+
+        <label for="filterType" class="visually-hidden">Filter by type</label>
+        <select id="filterType">
+          <option value="">All types</option>
+        </select>
+
+        <label for="filterPerson" class="visually-hidden">Filter by person</label>
+        <select id="filterPerson">
+          <option value="">All people</option>
+        </select>
+
+        <label for="filterLocation" class="visually-hidden">Filter by location</label>
+        <select id="filterLocation">
+          <option value="">All locations</option>
+        </select>
+      </div>
+      <div class="toolbar-row">
+        <label for="filterStatus" class="visually-hidden">Filter by status</label>
+        <select id="filterStatus">
+          <option value="">All statuses</option>
+          <option value="unreviewed">Unreviewed</option>
+          <option value="reviewed">Reviewed</option>
+          <option value="flagged">Flagged</option>
+        </select>
+
+        <label for="filterRelevance" class="visually-hidden">Filter by relevance</label>
+        <select id="filterRelevance">
+          <option value="">All relevance</option>
+          <option value="unknown">Unknown</option>
+          <option value="relevant">Relevant</option>
+          <option value="irrelevant">Irrelevant</option>
+        </select>
+
+        <label for="sortEvidence" class="visually-hidden">Sort evidence</label>
+        <select id="sortEvidence" onchange="handleSortChange()">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="title-asc">Title (A&ndash;Z)</option>
+          <option value="title-desc">Title (Z&ndash;A)</option>
+        </select>
+
+        <button type="button" id="clearFiltersBtn" class="btn btn-secondary">Clear filters</button>
+      </div>
+    </div>
+
+    <div id="evidenceListContainer">
+      <div id="evidenceLoadingIndicator" class="evidence-loading hidden">
+        <div class="spinner"></div>
+        <p>Loading evidence&hellip;</p>
+      </div>
+      <div id="evidenceList" class="evidence-grid"></div>
+    </div>
+
+    <div id="evidenceDetailSection" class="evidence-detail hidden"></div>
+  </section>
+
+  <!-- PEOPLE & LOCATIONS VIEW -->
+  <section id="view-people" class="view">
+    <h2>People &amp; Locations</h2>
+    <div class="tab-bar">
+      <button type="button" id="tabPeopleBtn" class="tab-btn active" onclick="switchPeopleTab('people')">People</button>
+      <button type="button" id="tabLocationsBtn" class="tab-btn" onclick="switchPeopleTab('locations')">Locations</button>
+    </div>
+    <div id="peoplePanel" class="people-grid"></div>
+    <div id="locationsPanel" class="locations-grid hidden"></div>
+  </section>
+
+  <!-- TIMELINE VIEW -->
+  <section id="view-timeline" class="view">
+    <h2>Investigation Timeline</h2>
+    <div class="toolbar" id="timelineToolbar">
+      <div class="toolbar-row">
+        <label for="timelineOrder" class="visually-hidden">Order</label>
+        <select id="timelineOrder">
+          <option value="asc">Oldest first</option>
+          <option value="desc">Newest first</option>
+        </select>
+
+        <label for="timelinePersonFilter" class="visually-hidden">Filter by person</label>
+        <select id="timelinePersonFilter">
+          <option value="">All people</option>
+        </select>
+
+        <label for="timelineLocationFilter" class="visually-hidden">Filter by location</label>
+        <select id="timelineLocationFilter">
+          <option value="">All locations</option>
+        </select>
+
+        <label for="timelineTypeFilter" class="visually-hidden">Filter by event type</label>
+        <select id="timelineTypeFilter">
+          <option value="">All event types</option>
+        </select>
+      </div>
+    </div>
+    <div id="timelineContainer" class="timeline-container"></div>
+  </section>
+
+  <!-- WORKSPACE VIEW -->
+  <section id="view-workspace" class="view">
+    <h2>Investigator Workspace</h2>
+
+    <div class="workspace-grid">
+      <div class="workspace-col">
+        <h3>Bookmarked Evidence</h3>
+        <div id="bookmarksList" class="bookmarks-list"></div>
+      </div>
+
+      <div class="workspace-col">
+        <h3>Personal Notes</h3>
+        <p class="hint-text">Notes are attached to whichever evidence item is currently open in the Evidence view.</p>
+        <div id="notesList" class="notes-list"></div>
+      </div>
+    </div>
+
+    <div class="hypothesis-card">
+      <h3>Hypothesis Draft</h3>
+      <form id="hypothesisForm">
+        <div class="form-row">
+          <label for="hypSuspect">Suspected responsible person</label>
+          <select id="hypSuspect">
+            <option value="">Select a person&hellip;</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="hypNature">Accidental or deliberate incident</label>
+          <select id="hypNature">
+            <option value="">Select&hellip;</option>
+            <option value="accidental">Accidental</option>
+            <option value="deliberate">Deliberate</option>
+            <option value="unclear">Unclear</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="hypEvidence">Selected supporting evidence</label>
+          <select id="hypEvidence" multiple size="6"></select>
+        </div>
+
+        <div class="form-row">
+          <label for="hypConfidence">Confidence (0&ndash;100)</label>
+          <input type="range" id="hypConfidence" min="0" max="100" value="50">
+          <output id="hypConfidenceValue">50</output>
+        </div>
+
+        <div class="form-row">
+          <label for="hypExplanation">Written explanation</label>
+          <textarea id="hypExplanation" rows="4" placeholder="Explain your reasoning&hellip;"></textarea>
+        </div>
+
+        <div class="form-row">
+          <label for="hypAlternative">Alternative explanation</label>
+          <textarea id="hypAlternative" rows="3" placeholder="What else could explain the evidence?"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" onclick="saveHypothesis()">Save hypothesis draft</button>
+          <span id="hypothesisSavedMsg" class="saved-msg hidden">Saved</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <p>Project ReMotion Investigation Portal &mdash; Research Center AI, Software and IT-Security of HCW (fictional case study)</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
