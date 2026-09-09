@@ -3,6 +3,9 @@
 // ---------------------------------------------------------------------
 import { navigateTo } from "./navigation.js";
 import { openEvidenceDetail } from "./evidence-detail.js";
+import {
+  allEvidence, allPeople, notesStore, STORAGE_KEY_HYPOTHESIS
+} from "./data.js";
 
 export function renderWorkspace() {
   renderBookmarksList();

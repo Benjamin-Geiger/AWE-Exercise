@@ -4,6 +4,10 @@
 import { findEvidenceById, findLocationById, formatDate } from "./lookup-utilities.js";
 import { navigateTo } from "./navigation.js";
 import { openEvidenceDetail } from "./evidence-detail.js";
+import {
+  allPeople, allLocations, allTimeline, modalCloseListenerCount,
+  incrementModalCloseListenerCount
+} from "./data.js";
 
 export function populateTimelineDropdowns() {
   var personSelect = document.getElementById("timelinePersonFilter");
@@ -117,7 +121,7 @@ function openEvidenceModal(evidenceId) {
     '<button type="button" class="btn btn-primary btn-small" data-open-full="' + ev.id + '">Open full evidence</button>' +
     "</div></div>";
 
-  modalCloseListenerCount++;
+  incrementModalCloseListenerCount();
   console.log("modal opened, active close listeners:", modalCloseListenerCount);
 
   modal.addEventListener("click", function (e) {

@@ -4,9 +4,10 @@
 import { evidenceMentionsPerson } from "./lookup-utilities.js";
 import { navigateTo } from "./navigation.js";
 import { renderEvidenceList } from "./evidence-catalogue.js";
+import { allEvidence, allPeople, allLocations, setCurrentPeopleTab } from "./data.js";
 
 export function switchPeopleTab(tab) {
-  currentPeopleTab = tab;
+  setCurrentPeopleTab(tab);
   var peoplePanel = document.getElementById("peoplePanel");
   var locationsPanel = document.getElementById("locationsPanel");
   var peopleTabBtn = document.getElementById("tabPeopleBtn");

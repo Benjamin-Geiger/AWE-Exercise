@@ -5,7 +5,12 @@ import { findEvidenceById, findPersonById, getRelevanceBadgeClass, getStatusBadg
 import { saveBookmarksToStorage } from "./storageHelpers.js";
 import { openEvidenceDetail } from "./evidence-detail.js";
 import { populateHypothesisDropdowns } from "./workspace.js";
+import {
+  allEvidence, filteredEvidence, bookmarks, currentPage, evidenceViewLoading,
+  setFilteredEvidence, setBookmarks
+} from "./data.js";
 import { populateTimelineDropdowns } from "./timeline.js";
+import { allPeople, allLocations } from "./data.js";
 
 export function populateAllDropdowns() {
   populateEvidenceDropdowns();
@@ -70,7 +75,7 @@ function getFilteredEvidence() {
     if (matches) results.push(item);
   }
 
-  filteredEvidence = results;
+  setFilteredEvidence(results);
   return results;
 }
 
@@ -147,9 +152,9 @@ function handleBookmarkClick(evidenceId) {
     bookmarks.push(evidenceId);
     ev.bookmarked = true;
   } else {
-    bookmarks = bookmarks.filter(function (id) {
+    setBookmarks(bookmarks.filter(function (id) {
       return id !== evidenceId;
-    });
+    }));
     ev.bookmarked = false;
   }
   saveBookmarksToStorage();

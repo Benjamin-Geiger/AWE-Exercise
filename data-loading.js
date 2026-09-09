@@ -4,6 +4,11 @@
 import { populateAllDropdowns, renderEvidenceList, applyStoredBookmarkFlags } from "./evidence-catalogue.js";
 import { renderDashboard } from "./dashboard.js";
 import { renderTimeline } from "./timeline.js";
+import {
+  setCaseData, setAllPeople, setAllLocations, setAllEvidence, setFilteredEvidence,
+  setAllTimeline, currentPage, loadingStepsRemaining, setLoadingStepsRemaining,
+  decrementLoadingStepsRemaining, allEvidence
+} from "./data.js";
 
 function showLoadingOverlay(msg) {
   var overlay = document.getElementById("loadingOverlay");
@@ -13,7 +18,7 @@ function showLoadingOverlay(msg) {
 }
 
 function hideLoadingStep() {
-  loadingStepsRemaining--;
+  decrementLoadingStepsRemaining();
   if (loadingStepsRemaining <= 0) {
     var overlay = document.getElementById("loadingOverlay");
     if (overlay) overlay.classList.add("hidden");
@@ -23,15 +28,15 @@ function hideLoadingStep() {
 function loadCorePeopleAndLocations() {
   return fetch("data/case.json").then(function (caseRes) {
     return caseRes.json().then(function (caseJson) {
-      caseData = caseJson;
+      setCaseData(caseJson);
 
       return fetch("data/people.json").then(function (peopleRes) {
         return peopleRes.json().then(function (peopleJson) {
-          allPeople = peopleJson;
+          setAllPeople(peopleJson);
 
           return fetch("data/locations.json").then(function (locationsRes) {
             return locationsRes.json().then(function (locationsJson) {
-              allLocations = locationsJson;
+              setAllLocations(locationsJson);
 
               hideLoadingStep();
               renderDashboard();
@@ -50,9 +55,9 @@ function loadEvidenceData() {
       return res.json();
     })
     .then(function (data) {
-      allEvidence = data;
+      setAllEvidence(data);
       applyStoredBookmarkFlags();
-      filteredEvidence = allEvidence; 
+      setFilteredEvidence(allEvidence);
       renderDashboard();
       populateAllDropdowns();
       if (currentPage === "evidence") renderEvidenceList();
@@ -69,7 +74,7 @@ function loadTimelineData() {
       return res.json();
     })
     .then(function (data) {
-      allTimeline = data;
+      setAllTimeline(data);
       renderDashboard();
       if (currentPage === "timeline") renderTimeline();
       populateAllDropdowns();
@@ -84,7 +89,7 @@ function loadTimelineData() {
 
 export function loadAllData() {
   showLoadingOverlay("Loading case file…");
-  loadingStepsRemaining = 2;
+  setLoadingStepsRemaining(2);
   return loadCorePeopleAndLocations().then(function () {
     loadEvidenceData();
     loadTimelineData();

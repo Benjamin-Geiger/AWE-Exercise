@@ -6,6 +6,7 @@ import { renderEvidenceList } from "./evidence-catalogue.js";
 import { renderPeople, renderLocations } from "./peopleAndLocations.js";
 import { renderTimeline } from "./timeline.js";
 import { renderWorkspace } from "./workspace.js";
+import { currentPage, viewRendered, setCurrentPage, setViewRendered } from "./data.js";
 
 export function navigateTo(viewName) {
   window.location.hash = viewName;
@@ -18,7 +19,7 @@ export function handleHashChange() {
   if (validViews.indexOf(hash) === -1) {
     hash = "dashboard";
   }
-  currentPage = hash;
+  setCurrentPage(hash);
 
   var sections = document.querySelectorAll(".view");
   for (var i = 0; i < sections.length; i++) {
@@ -36,17 +37,17 @@ export function handleHashChange() {
 
   if (hash === "dashboard" && !viewRendered.dashboard) {
     renderDashboard();
-    viewRendered.dashboard = true;
+    setViewRendered("dashboard", true);
   } else if (hash === "evidence" && !viewRendered.evidence) {
     renderEvidenceList();
-    viewRendered.evidence = true;
+    setViewRendered("evidence", true);
   } else if (hash === "people" && !viewRendered.people) {
     renderPeople();
     renderLocations();
-    viewRendered.people = true;
+    setViewRendered("people", true);
   } else if (hash === "timeline" && !viewRendered.timeline) {
     renderTimeline();
-    viewRendered.timeline = true;
+    setViewRendered("timeline", true);
   } else if (hash === "workspace") {
     // workspace is cheap enough that it always re-renders
     renderWorkspace();

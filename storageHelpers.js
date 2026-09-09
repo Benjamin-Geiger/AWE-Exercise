@@ -1,6 +1,10 @@
 // ---------------------------------------------------------------------
 // LOCAL STORAGE HELPERS (bookmarks & notes)
 // ---------------------------------------------------------------------
+import {
+  STORAGE_KEY_BOOKMARKS, STORAGE_KEY_NOTES, bookmarks, notesStore,
+  setBookmarks, setNotesStore
+} from "./data.js";
 
 export function saveBookmarksToStorage() {
   localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(bookmarks));
@@ -10,10 +14,10 @@ export function loadBookmarksFromStorage() {
   try {
     var raw = localStorage.getItem(STORAGE_KEY_BOOKMARKS);
     var parsed = raw ? JSON.parse(raw) : [];
-    bookmarks = Array.isArray(parsed) ? parsed : [];
+    setBookmarks(Array.isArray(parsed) ? parsed : []);
   } catch (err) {
     console.warn("Could not read stored bookmarks, starting empty", err);
-    bookmarks = [];
+    setBookmarks([]);
   }
 }
 
@@ -29,11 +33,11 @@ export function loadNoteForEvidence(evidenceId) {
 export function loadNotesFromStorage() {
   var raw = localStorage.getItem(STORAGE_KEY_NOTES);
   if (!raw) {
-    notesStore = {};
+    setNotesStore({});
     return;
   }
 
-  notesStore = JSON.parse(raw);
+  setNotesStore(JSON.parse(raw));
 }
 
 export function loadNoteAsync(evidenceId) {

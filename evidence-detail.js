@@ -4,11 +4,12 @@
 import { findEvidenceById, findLocationById, findPersonById, formatDate } from "./lookup-utilities.js";
 import { loadNoteForEvidence, saveNoteForEvidence } from "./storageHelpers.js";
 import { renderEvidenceList } from "./evidence-catalogue.js";
+import { setSelectedEvidence, selectedEvidence, viewRendered } from "./data.js";
 
 export function openEvidenceDetail(evidenceId) {
   var ev = findEvidenceById(evidenceId);
   if (!ev) return;
-  selectedEvidence = ev;
+  setSelectedEvidence(ev);
 
   var section = document.getElementById("evidenceDetailSection");
   section.classList.remove("hidden");
@@ -21,7 +22,7 @@ export function closeEvidenceDetail() {
   var section = document.getElementById("evidenceDetailSection");
   section.classList.add("hidden");
   section.innerHTML = "";
-  selectedEvidence = null;
+  setSelectedEvidence(null);
 }
 
 function renderEvidenceDetail(ev) {

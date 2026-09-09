@@ -11,6 +11,7 @@ import { loadBookmarksFromStorage, loadNotesFromStorage, loadNoteAsync } from ".
 import { saveHypothesis } from "./workspace.js";
 import { switchPeopleTab } from "./peopleAndLocations.js";
 import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
+import { allEvidence, currentPage } from "./data.js";
 
 // ---------------------------------------------------------------------
 // EVENT LISTENER SETUP

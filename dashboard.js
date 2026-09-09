@@ -2,6 +2,7 @@
 // DASHBOARD
 // ---------------------------------------------------------------------
 import { formatDate, getStatusBadgeClass } from "./lookup-utilities.js";
+import { allEvidence, allPeople, allLocations, bookmarks, caseData, allTimeline } from "./data.js";
 
 export function renderDashboard() {
   var container = document.getElementById("dashboardContent");
