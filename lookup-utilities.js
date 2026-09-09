@@ -1,4 +1,3 @@
-
 // ---------------------------------------------------------------------
 // GENERIC LOOKUP HELPERS
 // ---------------------------------------------------------------------
@@ -48,3 +47,5 @@ function getRelevanceBadgeClass(relevance) {
   if (r === "relevant") return "badge-relevant";
   return "badge-unreviewed";
 }
+
+export { findEvidenceById, findLocationById, findPersonById, evidenceMentionsPerson, formatDate, getStatusBadgeClass, getRelevanceBadgeClass };

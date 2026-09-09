@@ -1,6 +1,9 @@
 // ---------------------------------------------------------------------
 // DATA LOADING
 // ---------------------------------------------------------------------
+import { populateAllDropdowns, renderEvidenceList, applyStoredBookmarkFlags } from "./evidence-catalogue.js";
+import { renderDashboard } from "./dashboard.js";
+import { renderTimeline } from "./timeline.js";
 
 function showLoadingOverlay(msg) {
   var overlay = document.getElementById("loadingOverlay");
@@ -79,7 +82,7 @@ function loadTimelineData() {
     });
 }
 
-function loadAllData() {
+export function loadAllData() {
   showLoadingOverlay("Loading case file…");
   loadingStepsRemaining = 2;
   return loadCorePeopleAndLocations().then(function () {

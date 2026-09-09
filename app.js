@@ -1,8 +1,16 @@
-
-
-
-
-
+import { loadAllData } from "./data-loading.js";
+import { handleHashChange, navigateTo } from "./navigation.js";
+import {
+  clearFilters,
+  handleSearchInput,
+  handleSortChange,
+  renderEvidenceList
+} from "./evidence-catalogue.js";
+import { renderTimeline } from "./timeline.js";
+import { loadBookmarksFromStorage, loadNotesFromStorage, loadNoteAsync } from "./storageHelpers.js";
+import { saveHypothesis } from "./workspace.js";
+import { switchPeopleTab } from "./peopleAndLocations.js";
+import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
 
 // ---------------------------------------------------------------------
 // EVENT LISTENER SETUP
@@ -41,6 +49,13 @@ function setupEventListeners() {
     document.getElementById("hypConfidenceValue").textContent = e.target.value;
   });
 }
+
+window.navigateTo = navigateTo;
+window.handleSortChange = handleSortChange;
+window.switchPeopleTab = switchPeopleTab;
+window.saveHypothesis = saveHypothesis;
+window.closeEvidenceDetail = closeEvidenceDetail;
+window.saveCurrentNote = saveCurrentNote;
 
 // ---------------------------------------------------------------------
 // INIT

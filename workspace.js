@@ -1,8 +1,10 @@
 // ---------------------------------------------------------------------
 // WORKSPACE
 // ---------------------------------------------------------------------
+import { navigateTo } from "./navigation.js";
+import { openEvidenceDetail } from "./evidence-detail.js";
 
-function renderWorkspace() {
+export function renderWorkspace() {
   renderBookmarksList();
   renderNotesList();
   populateHypothesisDropdowns();
@@ -68,7 +70,7 @@ function renderNotesList() {
   container.innerHTML = html;
 }
 
-function populateHypothesisDropdowns() {
+export function populateHypothesisDropdowns() {
   var suspectSelect = document.getElementById("hypSuspect");
   var evidenceSelect = document.getElementById("hypEvidence");
   if (!suspectSelect || !evidenceSelect) return;
@@ -86,7 +88,7 @@ function populateHypothesisDropdowns() {
   }
 }
 
-function saveHypothesis() {
+export function saveHypothesis() {
   var draft = {
     suspectId: document.getElementById("hypSuspect").value,
     nature: document.getElementById("hypNature").value,

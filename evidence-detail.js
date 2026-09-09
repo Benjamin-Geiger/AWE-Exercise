@@ -1,8 +1,11 @@
 // ---------------------------------------------------------------------
 // EVIDENCE DETAIL
 // ---------------------------------------------------------------------
+import { findEvidenceById, findLocationById, findPersonById, formatDate } from "./lookup-utilities.js";
+import { loadNoteForEvidence, saveNoteForEvidence } from "./storageHelpers.js";
+import { renderEvidenceList } from "./evidence-catalogue.js";
 
-function openEvidenceDetail(evidenceId) {
+export function openEvidenceDetail(evidenceId) {
   var ev = findEvidenceById(evidenceId);
   if (!ev) return;
   selectedEvidence = ev;
@@ -14,7 +17,7 @@ function openEvidenceDetail(evidenceId) {
   section.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function closeEvidenceDetail() {
+export function closeEvidenceDetail() {
   var section = document.getElementById("evidenceDetailSection");
   section.classList.add("hidden");
   section.innerHTML = "";
@@ -101,7 +104,7 @@ function statusOptionHTML(current, value, label) {
   return '<option value="' + value + '"' + selected + ">" + label + "</option>";
 }
 
-function saveCurrentNote() {
+export function saveCurrentNote() {
   var textarea = document.getElementById("evidenceNoteInput");
   if (!textarea) return;
   var evidenceId = textarea.getAttribute("data-evidence-id"); // note id is read back off the DOM

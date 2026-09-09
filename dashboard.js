@@ -1,8 +1,9 @@
 // ---------------------------------------------------------------------
 // DASHBOARD
 // ---------------------------------------------------------------------
+import { formatDate, getStatusBadgeClass } from "./lookup-utilities.js";
 
-function renderDashboard() {
+export function renderDashboard() {
   var container = document.getElementById("dashboardContent");
   if (!container) return;
 

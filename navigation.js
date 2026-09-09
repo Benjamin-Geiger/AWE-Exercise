@@ -1,14 +1,18 @@
-
 // ---------------------------------------------------------------------
 // NAVIGATION / HASH ROUTING
 // ---------------------------------------------------------------------
+import { renderDashboard } from "./dashboard.js";
+import { renderEvidenceList } from "./evidence-catalogue.js";
+import { renderPeople, renderLocations } from "./peopleAndLocations.js";
+import { renderTimeline } from "./timeline.js";
+import { renderWorkspace } from "./workspace.js";
 
-function navigateTo(viewName) {
+export function navigateTo(viewName) {
   window.location.hash = viewName;
   // handleHashChange() will pick this up via the hashchange listener
 }
 
-function handleHashChange() {
+export function handleHashChange() {
   var hash = window.location.hash.replace("#", "");
   var validViews = ["dashboard", "evidence", "people", "timeline", "workspace"];
   if (validViews.indexOf(hash) === -1) {

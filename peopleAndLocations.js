@@ -1,8 +1,11 @@
 // ---------------------------------------------------------------------
 // PEOPLE & LOCATIONS
 // ---------------------------------------------------------------------
+import { evidenceMentionsPerson } from "./lookup-utilities.js";
+import { navigateTo } from "./navigation.js";
+import { renderEvidenceList } from "./evidence-catalogue.js";
 
-function switchPeopleTab(tab) {
+export function switchPeopleTab(tab) {
   currentPeopleTab = tab;
   var peoplePanel = document.getElementById("peoplePanel");
   var locationsPanel = document.getElementById("locationsPanel");
@@ -30,7 +33,7 @@ function countEvidenceForPerson(person) {
   return count;
 }
 
-function renderPeople() {
+export function renderPeople() {
   var container = document.getElementById("peoplePanel");
   var html = "";
   for (var i = 0; i < allPeople.length; i++) {
@@ -68,7 +71,7 @@ function renderPeople() {
   }
 }
 
-function renderLocations() {
+export function renderLocations() {
   var container = document.getElementById("locationsPanel");
   var html = "";
   for (var i = 0; i < allLocations.length; i++) {

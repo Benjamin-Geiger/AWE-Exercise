@@ -1,9 +1,11 @@
-
 // ---------------------------------------------------------------------
 // TIMELINE
 // ---------------------------------------------------------------------
+import { findEvidenceById, findLocationById, formatDate } from "./lookup-utilities.js";
+import { navigateTo } from "./navigation.js";
+import { openEvidenceDetail } from "./evidence-detail.js";
 
-function populateTimelineDropdowns() {
+export function populateTimelineDropdowns() {
   var personSelect = document.getElementById("timelinePersonFilter");
   var locationSelect = document.getElementById("timelineLocationFilter");
   var typeSelect = document.getElementById("timelineTypeFilter");
@@ -29,7 +31,7 @@ function populateTimelineDropdowns() {
   }
 }
 
-function renderTimeline() {
+export function renderTimeline() {
   var container = document.getElementById("timelineContainer");
   if (!container) return;
 

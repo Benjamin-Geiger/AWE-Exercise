@@ -5,6 +5,7 @@ import { findEvidenceById, findPersonById, getRelevanceBadgeClass, getStatusBadg
 import { saveBookmarksToStorage } from "./storageHelpers.js";
 import { openEvidenceDetail } from "./evidence-detail.js";
 import { populateHypothesisDropdowns } from "./workspace.js";
+import { populateTimelineDropdowns } from "./timeline.js";
 
 export function populateAllDropdowns() {
   populateEvidenceDropdowns();
