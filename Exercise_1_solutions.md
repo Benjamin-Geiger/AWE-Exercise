@@ -55,3 +55,15 @@ The operation is fetch("data/evidence.json") in data-loading.js:53. It returns t
 Confirmed:
 
 Network tab shows evidence.json returning 200 with the full body so it's no load failure. data.length === 18 so the promise is fulfilled the data. Followed the callback -> evidenceViewLoading stays true indicating the failure to transition the state. 
+
+## Demo 4
+
+Changing the status filter in the evidence catalogue creates a "Uncaught ReferenceError: renderEvidenceList is not defined" error. However no visible bug can be observed.
+
+Cause: app.js:36-37 -> two handlers on the same element. The EventListener uses the import from the module scope. Line 37 calls "renderEvidenceList()" which doesn't exist and therefore throws.
+
+### Q1
+
+Since there is no visible change in the UI I would not have spotted the bug if I hadn't the console window of my browser open. The app seems to work as intended so without the error there is no reason to suspect otherwise.
+
+Just because something works doesn't mean it works as intended. Especially if something work on accident it always poses a threat for a bigger problem in the future if not aware of the problem. Also features we don't want still use resources even when we don't see them, if its a reoccurance can cause bigger issues. 

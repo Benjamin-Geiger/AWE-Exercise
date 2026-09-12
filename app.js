@@ -34,7 +34,6 @@ function setupEventListeners() {
   document.getElementById("filterLocation").addEventListener("change", renderEvidenceList);
 
   document.getElementById("filterStatus").addEventListener("change", renderEvidenceList);
-  document.getElementById("filterStatus").setAttribute("onchange", "renderEvidenceList()");
 
   document.getElementById("filterRelevance").addEventListener("change", renderEvidenceList);
 
