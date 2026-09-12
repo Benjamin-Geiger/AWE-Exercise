@@ -8,7 +8,7 @@ import { populateHypothesisDropdowns } from "./workspace.js";
 import {
   allEvidence, filteredEvidence, bookmarks, currentPage, evidenceViewLoading,
   setFilteredEvidence, setBookmarks, allPeople, allLocations
-} from "./data.js";
+} from "./state.js";
 import { populateTimelineDropdowns } from "./timeline.js";
 
 export function populateAllDropdowns() {

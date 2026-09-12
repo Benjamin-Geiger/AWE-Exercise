@@ -4,7 +4,7 @@
 import {
   STORAGE_KEY_BOOKMARKS, STORAGE_KEY_NOTES, bookmarks, notesStore,
   setBookmarks, setNotesStore
-} from "./data.js";
+} from "./state.js";
 
 export function saveBookmarksToStorage() {
   localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(bookmarks));

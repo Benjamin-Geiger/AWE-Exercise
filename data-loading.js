@@ -8,7 +8,7 @@ import {
   setCaseData, setAllPeople, setAllLocations, setAllEvidence, setFilteredEvidence,
   setAllTimeline, currentPage, loadingStepsRemaining, setLoadingStepsRemaining,
   decrementLoadingStepsRemaining, allEvidence
-} from "./data.js";
+} from "./state.js";
 
 function showLoadingOverlay(msg) {
   var overlay = document.getElementById("loadingOverlay");
@@ -57,7 +57,7 @@ function loadEvidenceData() {
     .then(function (data) {
       setAllEvidence(data);
       applyStoredBookmarkFlags();
-      setFilteredEvidence(allEvidence);
+      setFilteredEvidence(...allEvidence);
       renderDashboard();
       populateAllDropdowns();
       if (currentPage === "evidence") renderEvidenceList();

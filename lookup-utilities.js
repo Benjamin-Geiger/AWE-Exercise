@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------
 // GENERIC LOOKUP HELPERS
 // ---------------------------------------------------------------------
-import { allEvidence, allPeople, allLocations } from "./data.js";
+import { allEvidence, allPeople, allLocations } from "./state.js";
 function findEvidenceById(id) {
   for (var i = 0; i < allEvidence.length; i++) {
     if (allEvidence[i].id === id) return allEvidence[i];

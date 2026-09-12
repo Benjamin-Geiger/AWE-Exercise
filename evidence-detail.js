@@ -4,7 +4,7 @@
 import { findEvidenceById, findLocationById, findPersonById, formatDate } from "./lookup-utilities.js";
 import { loadNoteForEvidence, saveNoteForEvidence } from "./storageHelpers.js";
 import { renderEvidenceList } from "./evidence-catalogue.js";
-import { setSelectedEvidence, viewRendered } from "./data.js";
+import { setSelectedEvidence, viewRendered } from "./state.js";
 
 export function openEvidenceDetail(evidenceId) {
   var ev = findEvidenceById(evidenceId);

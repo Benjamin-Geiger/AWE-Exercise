@@ -7,7 +7,7 @@ import { openEvidenceDetail } from "./evidence-detail.js";
 import {
   allPeople, allLocations, allTimeline, modalCloseListenerCount,
   incrementModalCloseListenerCount
-} from "./data.js";
+} from "./state.js";
 
 export function populateTimelineDropdowns() {
   var personSelect = document.getElementById("timelinePersonFilter");
