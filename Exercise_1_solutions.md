@@ -44,3 +44,14 @@ A reference is a pointer to a space in memory and there can be multible referenc
 
 ## Demo 3
 
+Evidence Catalogue doesn't display anything. Endless loading spinner and filters don't change anything. Data loads, but it is not shown in the view. 
+
+In state.js evidenceViewLoading is set to true and inspection shows it remains so troughout the lifecycle. State wasn't properly adjusted when evidenceLoading was resolved or rejected. To fix I adjusted loading state upon completion or failure of evidenceViewLoading. Setting evidenceViewLoading to "false" would let the view load but would render the flag obsolete and not provide propper loading feedback.
+
+### Q1
+
+The operation is fetch("data/evidence.json") in data-loading.js:53. It returns the evidence records. The fetch is either fulfilled or rejected a state evidenceViewLoading is supposed to represent. On start and while pending true and should flip to false when fulfilled (which it didn't) or rejected.
+
+Confirmed:
+
+Network tab shows evidence.json returning 200 with the full body so it's no load failure. data.length === 18 so the promise is fulfilled the data. Followed the callback -> evidenceViewLoading stays true indicating the failure to transition the state. 

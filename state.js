@@ -46,3 +46,4 @@ export function decrementLoadingStepsRemaining() { loadingStepsRemaining--; }
 export function setNotesStore(value) { notesStore = value; }
 export function incrementModalCloseListenerCount() { modalCloseListenerCount++; }
 export function setViewRendered(view, value) { viewRendered[view] = value; }
+export function setEvidenceViewLoading(value) { evidenceViewLoading = value; }

@@ -7,7 +7,7 @@ import { renderTimeline } from "./timeline.js";
 import {
   setCaseData, setAllPeople, setAllLocations, setAllEvidence, setFilteredEvidence,
   setAllTimeline, currentPage, loadingStepsRemaining, setLoadingStepsRemaining,
-  decrementLoadingStepsRemaining, allEvidence
+  decrementLoadingStepsRemaining, allEvidence, setEvidenceViewLoading
 } from "./state.js";
 
 function showLoadingOverlay(msg) {
@@ -58,12 +58,14 @@ function loadEvidenceData() {
       setAllEvidence(data);
       applyStoredBookmarkFlags();
       setFilteredEvidence([...allEvidence]);
+      setEvidenceViewLoading(false);
       renderDashboard();
       populateAllDropdowns();
       if (currentPage === "evidence") renderEvidenceList();
     })
     .catch(function (err) {
       console.error("Failed to load evidence.json", err);
+      setEvidenceViewLoading(false); // adjust state on failure
       alert("Evidence could not be loaded. Some views may be incomplete.");
     });
 }
