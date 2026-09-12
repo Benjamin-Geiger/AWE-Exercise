@@ -7,10 +7,9 @@ import { openEvidenceDetail } from "./evidence-detail.js";
 import { populateHypothesisDropdowns } from "./workspace.js";
 import {
   allEvidence, filteredEvidence, bookmarks, currentPage, evidenceViewLoading,
-  setFilteredEvidence, setBookmarks
+  setFilteredEvidence, setBookmarks, allPeople, allLocations
 } from "./data.js";
 import { populateTimelineDropdowns } from "./timeline.js";
-import { allPeople, allLocations } from "./data.js";
 
 export function populateAllDropdowns() {
   populateEvidenceDropdowns();
@@ -220,5 +219,3 @@ export function handleSearchInput(event) {
     renderEvidenceList();
   });
 }
-
-export { handleEvidenceListClick };

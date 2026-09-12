@@ -11,7 +11,6 @@ import { loadBookmarksFromStorage, loadNotesFromStorage, loadNoteAsync } from ".
 import { saveHypothesis } from "./workspace.js";
 import { switchPeopleTab } from "./peopleAndLocations.js";
 import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
-import { allEvidence, currentPage } from "./data.js";
 
 // ---------------------------------------------------------------------
 // EVENT LISTENER SETUP
@@ -22,8 +21,8 @@ function setupEventListeners() {
 
   var navButtons = document.querySelectorAll(".nav-btn");
   for (var i = 0; i < navButtons.length; i++) {
-    navButtons[i].addEventListener("click", function () {
-      var targetView = navButtons[i].getAttribute("data-view");
+    navButtons[i].addEventListener("click", function (event) {
+      var targetView = event.currentTarget.getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
   }

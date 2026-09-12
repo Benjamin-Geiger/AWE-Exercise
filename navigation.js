@@ -6,7 +6,7 @@ import { renderEvidenceList } from "./evidence-catalogue.js";
 import { renderPeople, renderLocations } from "./peopleAndLocations.js";
 import { renderTimeline } from "./timeline.js";
 import { renderWorkspace } from "./workspace.js";
-import { currentPage, viewRendered, setCurrentPage, setViewRendered } from "./data.js";
+import { viewRendered, setCurrentPage, setViewRendered } from "./data.js";
 
 export function navigateTo(viewName) {
   window.location.hash = viewName;
