@@ -3,21 +3,21 @@
 // ---------------------------------------------------------------------
 import { allEvidence, allPeople, allLocations } from "./state.js";
 function findEvidenceById(id) {
-  for (var i = 0; i < allEvidence.length; i++) {
+  for (let i = 0; i < allEvidence.length; i++) {
     if (allEvidence[i].id === id) return allEvidence[i];
   }
   return null;
 }
 
 function findPersonById(id) {
-  for (var i = 0; i < allPeople.length; i++) {
+  for (let i = 0; i < allPeople.length; i++) {
     if (allPeople[i].id === id) return allPeople[i];
   }
   return null;
 }
 
 function findLocationById(id) {
-  for (var i = 0; i < allLocations.length; i++) {
+  for (let i = 0; i < allLocations.length; i++) {
     if (allLocations[i].id === id) return allLocations[i];
   }
   return null;
@@ -30,23 +30,33 @@ function evidenceMentionsPerson(ev, person) {
 
 function formatDate(ts) {
   if (!ts) return "Unknown date";
-  var d = new Date(ts);
+  const d = new Date(ts);
   if (isNaN(d.getTime())) return ts;
   return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) +
     " " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
 }
 
 function getStatusBadgeClass(status) {
-  var s = (status || "").toLowerCase();
+  const s = (status || "").toLowerCase();
   if (s === "reviewed") return "badge-reviewed";
   if (s === "flagged") return "badge-flagged";
   return "badge-unreviewed";
 }
 
 function getRelevanceBadgeClass(relevance) {
-  var r = (relevance || "").toLowerCase();
+  const r = (relevance || "").toLowerCase();
   if (r === "relevant") return "badge-relevant";
   return "badge-unreviewed";
 }
 
-export { findEvidenceById, findLocationById, findPersonById, evidenceMentionsPerson, formatDate, getStatusBadgeClass, getRelevanceBadgeClass };
+// User-typed text must be inserted as text, not markup.
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export { findEvidenceById, findLocationById, findPersonById, evidenceMentionsPerson, formatDate, getStatusBadgeClass, getRelevanceBadgeClass, escapeHtml };

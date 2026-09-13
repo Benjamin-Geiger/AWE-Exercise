@@ -14,21 +14,21 @@ export function navigateTo(viewName) {
 }
 
 export function handleHashChange() {
-  var hash = window.location.hash.replace("#", "");
-  var validViews = ["dashboard", "evidence", "people", "timeline", "workspace"];
+  let hash = window.location.hash.replace("#", "");
+  const validViews = ["dashboard", "evidence", "people", "timeline", "workspace"];
   if (validViews.indexOf(hash) === -1) {
     hash = "dashboard";
   }
   setCurrentPage(hash);
 
-  var sections = document.querySelectorAll(".view");
-  for (var i = 0; i < sections.length; i++) {
+  const sections = document.querySelectorAll(".view");
+  for (let i = 0; i < sections.length; i++) {
     sections[i].classList.remove("active");
   }
   document.getElementById("view-" + hash).classList.add("active");
 
-  var navButtons = document.querySelectorAll(".nav-btn");
-  for (var n = 0; n < navButtons.length; n++) {
+  const navButtons = document.querySelectorAll(".nav-btn");
+  for (let n = 0; n < navButtons.length; n++) {
     navButtons[n].classList.remove("active");
     if (navButtons[n].getAttribute("data-view") === hash) {
       navButtons[n].classList.add("active");

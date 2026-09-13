@@ -113,3 +113,43 @@ Overlay shows first, case, people and locations load one after another, then evi
 Order matters because every render uses whatever state exists at that moment. Views that re-render when data arrives fix themselves, views that render once freeze the empty values, and a loading indicator that doesn't track every request says done while data is missing.
 
 ## Demo 8
+
+### Globals
+
+Top-level vars in the original app.js: allEvidence, filteredEvidence, selectedEvidence, bookmarks, currentPage, allPeople, allLocations, allTimeline, caseData, currentPeopleTab, loadingStepsRemaining, evidenceViewLoading, viewRendered, notesStore, modalCloseListenerCount, STORAGE_KEY_BOOKMARKS, STORAGE_KEY_NOTES, STORAGE_KEY_HYPOTHESIS (+ latestSearchRequestId further down).
+
+In a classic script every one of them is a property of window, shared with every other script on the page -> same name = same variable, last write wins, no error.
+
+- currentPage -> generic name, another script doing "var currentPage = 1" overwrites it and "currentPage === 'evidence'" checks silently fail. Prevented by modules, it lives in state.js module scope and not on window.
+- STORAGE_KEY_NOTES -> meant as a constant but was a reassignable global. Something assigning it would make the app read/write a different localStorage key and notes look lost. Prevented, now "export const", not global and not reassignable.
+- bookmarks -> name collision prevented, but every module importing state.js can still push to it or call setBookmarks (evidence-catalogue.js does both). Not prevented yet, the split only made the dependency visible.
+
+### var -> let/const
+
+Replaced all 168 vars: 108 const, 60 let. Rule: const by default, let only if the binding is reassigned (=, +=, ++). Mutating an array/object is not reassignment -> "const results = []" with results.push() is fine.
+
+let only for loop counters, html strings built with +=, counters, the matches flag in getFilteredEvidence, hash in handleHashChange, events in renderTimeline, modal in openEvidenceModal and latestSearchRequestId. viewRendered in state.js changed to "export const" since only its properties change.
+
+Checked with a script for bindings used outside their new block scope or before their declaration -> no real cases. All views still render.
+
+### Code smells
+
+1. Notes rendered as HTML (evidence-detail.js, workspace.js). User text was concatenated into innerHTML, a note like <img src=x onerror="alert(1)"> runs every time it is shown and is stored in localStorage. Added escapeHtml() in lookup-utilities.js for the textarea, preview and workspace notes list, save preview uses textContent. Text now stays text.
+2. Quick-view modal leaked listeners (timeline.js). The modal element is reused but every open added a new anonymous click listener -> 5 opens = 5 listeners, "Open full evidence" opened the detail 5 times. The console.log counter was debug code reporting the leak. Listener is now a named handleModalClick registered once when the modal is created, counter removed from state.js. 5 opens -> 1 listener, 1 open.
+3. Write-only state. selectedEvidence and currentPeopleTab were set but never read anywhere. Removed the variables, setters and calls.
+
+### Q1
+
+var is function scoped and can be redeclared and reassigned. let is block scoped and can be reassigned, const is block scoped and can't be reassigned (object contents can still change).
+
+Bug from this app: the original nav button loop in app.js used "for (var i ...)" and read navButtons[i] inside the click callback. All callbacks share one i which is 5 when clicked -> navButtons[5] is undefined -> TypeError on every nav click. With let every iteration gets its own i and the callback reads the right button.
+
+### Q2
+
+In non-strict code assigning to an undeclared name ("count = 0" without let/const/var) silently creates a property on window, a new global. Modules are always strict -> the same line throws "ReferenceError: count is not defined" at the line of the mistake.
+
+### Q3
+
+The loop counters: renderTimeline used i, e, el, ev2, b and populateEvidenceDropdowns i, ti, p, l. It worked, but the names only existed because var is function scoped and reusing i would share one variable. A reader has to check each name for meaning and nobody sees at a glance which loop it belongs to -> slower onboarding and review. With let every loop can use i.
+
+Same for the write-only selectedEvidence/currentPeopleTab: nothing broke, but a reader has to search the whole app to find out they do nothing.

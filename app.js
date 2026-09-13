@@ -19,10 +19,10 @@ import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
 function setupEventListeners() {
   window.addEventListener("hashchange", handleHashChange);
 
-  var navButtons = document.querySelectorAll(".nav-btn");
-  for (var i = 0; i < navButtons.length; i++) {
+  const navButtons = document.querySelectorAll(".nav-btn");
+  for (let i = 0; i < navButtons.length; i++) {
     navButtons[i].addEventListener("click", function (event) {
-      var targetView = event.currentTarget.getAttribute("data-view");
+      const targetView = event.currentTarget.getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
   }
@@ -67,7 +67,7 @@ function initApp() {
 
   loadAllData().then(function () {
     handleHashChange();
-    var firstNote = loadNoteAsync("E01");
+    const firstNote = loadNoteAsync("E01");
     console.log("First note preview:", firstNote);
   });
 }
