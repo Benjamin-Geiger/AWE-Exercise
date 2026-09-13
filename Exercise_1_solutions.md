@@ -67,3 +67,15 @@ Cause: app.js:36-37 -> two handlers on the same element. The EventListener uses 
 Since there is no visible change in the UI I would not have spotted the bug if I hadn't the console window of my browser open. The app seems to work as intended so without the error there is no reason to suspect otherwise.
 
 Just because something works doesn't mean it works as intended. Especially if something work on accident it always poses a threat for a bigger problem in the future if not aware of the problem. Also features we don't want still use resources even when we don't see them, if its a reoccurance can cause bigger issues. 
+
+## Demo 5
+
+### Bug 1
+
+navigation.js:38 -> viewRenderd state is frozen at load time values. Removing "!viewRendered.dashboard" allows for rendering.
+
+### Bug 2
+Sorting evidence by age or title does not work. evidence-catalogue.js:169 handleSortChange sorts the filteredEvidence and calls renderEvidenceList() which -> builds new results array from allEvidence and overwrites the sorted array with it. Returns results which just contains the unsorted list which is rendered.
+
+Solution: Split the sorting function and the rendering call, so the list is rendered after filtering. "handleSortChange()" is no longer responsible for sorting the results, it only calls "renderEvidenceList()" which calls "sortResults()". 
+Sort now runs on the same array that gets rendered.

@@ -90,7 +90,7 @@ export function renderEvidenceList() {
   }
   if (loadingIndicator) loadingIndicator.classList.add("hidden");
 
-  var results = getFilteredEvidence();
+  var results = sortResults(getFilteredEvidence());
 
   var html = "";
   if (results.length === 0) {
@@ -166,28 +166,33 @@ export function applyStoredBookmarkFlags() {
   }
 }
 
-export function handleSortChange() {
+export function sortResults(items) {
   var sortValue = document.getElementById("sortEvidence").value;
 
   if (sortValue === "title-asc") {
-    filteredEvidence.sort(function (a, b) {
+    items.sort(function (a, b) {
       return a.title.localeCompare(b.title);
     });
   } else if (sortValue === "title-desc") {
-    filteredEvidence.sort(function (a, b) {
+    items.sort(function (a, b) {
       return b.title.localeCompare(a.title);
     });
   } else if (sortValue === "date-asc") {
-    filteredEvidence.sort(function (a, b) {
+    items.sort(function (a, b) {
       return new Date(a.timestamp) - new Date(b.timestamp);
     });
   } else {
-    filteredEvidence.sort(function (a, b) {
+    items.sort(function (a, b) {
       return new Date(b.timestamp) - new Date(a.timestamp);
     });
   }
+  return items;
+}
+
+export function handleSortChange() {
   renderEvidenceList();
 }
+
 
 export function clearFilters() {
   document.getElementById("evidenceSearch").value = "";

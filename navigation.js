@@ -35,7 +35,7 @@ export function handleHashChange() {
     }
   }
 
-  if (hash === "dashboard" && !viewRendered.dashboard) {
+  if (hash === "dashboard") { //&& !viewRendered.dashboard -> blocks rerendering
     renderDashboard();
     setViewRendered("dashboard", true);
   } else if (hash === "evidence" && !viewRendered.evidence) {
