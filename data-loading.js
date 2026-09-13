@@ -25,75 +25,63 @@ function hideLoadingStep() {
   }
 }
 
-function loadCorePeopleAndLocations() {
-  return fetch("data/case.json").then(function (caseRes) {
-    return caseRes.json().then(function (caseJson) {
-      setCaseData(caseJson);
+// Still sequential on purpose: each request only starts after the previous one finished.
+async function loadCorePeopleAndLocations() {
+  const caseRes = await fetch("data/case.json");
+  const caseJson = await caseRes.json();
+  setCaseData(caseJson);
 
-      return fetch("data/people.json").then(function (peopleRes) {
-        return peopleRes.json().then(function (peopleJson) {
-          setAllPeople(peopleJson);
+  const peopleRes = await fetch("data/people.json");
+  const peopleJson = await peopleRes.json();
+  setAllPeople(peopleJson);
 
-          return fetch("data/locations.json").then(function (locationsRes) {
-            return locationsRes.json().then(function (locationsJson) {
-              setAllLocations(locationsJson);
+  const locationsRes = await fetch("data/locations.json");
+  const locationsJson = await locationsRes.json();
+  setAllLocations(locationsJson);
 
-              hideLoadingStep();
-              renderDashboard();
-              populateAllDropdowns();
-            });
-          });
-        });
-      });
-    });
-  });
+  hideLoadingStep();
+  renderDashboard();
+  populateAllDropdowns();
 }
 
-function loadEvidenceData() {
-  fetch("data/evidence.json")
-    .then(function (res) {
-      return res.json();
-    })
-    .then(function (data) {
-      setAllEvidence(data);
-      applyStoredBookmarkFlags();
-      setFilteredEvidence([...allEvidence]);
-      setEvidenceViewLoading(false);
-      renderDashboard();
-      populateAllDropdowns();
-      if (currentPage === "evidence") renderEvidenceList();
-    })
-    .catch(function (err) {
-      console.error("Failed to load evidence.json", err);
-      setEvidenceViewLoading(false); // adjust state on failure
-      alert("Evidence could not be loaded. Some views may be incomplete.");
-    });
+async function loadEvidenceData() {
+  try {
+    const res = await fetch("data/evidence.json");
+    const data = await res.json();
+    setAllEvidence(data);
+    applyStoredBookmarkFlags();
+    setFilteredEvidence([...allEvidence]);
+    setEvidenceViewLoading(false);
+    renderDashboard();
+    populateAllDropdowns();
+    if (currentPage === "evidence") renderEvidenceList();
+  } catch (err) {
+    console.error("Failed to load evidence.json", err);
+    setEvidenceViewLoading(false); // adjust state on failure
+    alert("Evidence could not be loaded. Some views may be incomplete.");
+  }
 }
 
-function loadTimelineData() {
-  return fetch("data/timeline.json")
-    .then(function (res) {
-      return res.json();
-    })
-    .then(function (data) {
-      setAllTimeline(data);
-      renderDashboard();
-      if (currentPage === "timeline") renderTimeline();
-      populateAllDropdowns();
-    })
-    .catch(function (err) {
-      console.log("timeline load error", err);
-    })
-    .finally(function () {
-      hideLoadingStep();
-    });
+async function loadTimelineData() {
+  try {
+    const res = await fetch("data/timeline.json");
+    const data = await res.json();
+    setAllTimeline(data);
+    renderDashboard();
+    if (currentPage === "timeline") renderTimeline();
+    populateAllDropdowns();
+  } catch (err) {
+    console.log("timeline load error", err);
+  } finally {
+    hideLoadingStep();
+  }
 }
 
-export function loadAllData() {
+export async function loadAllData() {
   showLoadingOverlay("Loading case file…");
   setLoadingStepsRemaining(2);
-  return loadCorePeopleAndLocations().then(function () {
-    loadEvidenceData();
-    loadTimelineData();
-  });
+  await loadCorePeopleAndLocations();
+  // Started but not awaited, exactly like the .then() version.
+  loadEvidenceData();
+  loadTimelineData();
 }

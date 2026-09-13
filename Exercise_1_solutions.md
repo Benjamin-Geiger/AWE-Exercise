@@ -116,21 +116,19 @@ Order matters because every render uses whatever state exists at that moment. Vi
 
 ### Globals
 
-Top-level vars in the original app.js: allEvidence, filteredEvidence, selectedEvidence, bookmarks, currentPage, allPeople, allLocations, allTimeline, caseData, currentPeopleTab, loadingStepsRemaining, evidenceViewLoading, viewRendered, notesStore, modalCloseListenerCount, STORAGE_KEY_BOOKMARKS, STORAGE_KEY_NOTES, STORAGE_KEY_HYPOTHESIS (+ latestSearchRequestId further down).
+Top-level vars in the original app.js: allEvidence, filteredEvidence, selectedEvidence, bookmarks, currentPage, allPeople, allLocations, allTimeline, caseData, currentPeopleTab, loadingStepsRemaining, evidenceViewLoading, viewRendered, notesStore, modalCloseListenerCount, STORAGE_KEY_BOOKMARKS, STORAGE_KEY_NOTES, STORAGE_KEY_HYPOTHESIS
 
 In a classic script every one of them is a property of window, shared with every other script on the page -> same name = same variable, last write wins, no error.
 
 - currentPage -> generic name, another script doing "var currentPage = 1" overwrites it and "currentPage === 'evidence'" checks silently fail. Prevented by modules, it lives in state.js module scope and not on window.
 - STORAGE_KEY_NOTES -> meant as a constant but was a reassignable global. Something assigning it would make the app read/write a different localStorage key and notes look lost. Prevented, now "export const", not global and not reassignable.
-- bookmarks -> name collision prevented, but every module importing state.js can still push to it or call setBookmarks (evidence-catalogue.js does both). Not prevented yet, the split only made the dependency visible.
+- bookmarks -> name collision prevented, but every module importing state.js can still push to it or call setBookmarks (evidence-catalogue.js does both). Not prevented yet, the split made the dependency visible.
 
 ### var -> let/const
 
-Replaced all 168 vars: 108 const, 60 let. Rule: const by default, let only if the binding is reassigned (=, +=, ++). Mutating an array/object is not reassignment -> "const results = []" with results.push() is fine.
+Replaced all vars. const by default, let only if the binding is reassigned. Mutating an array/object is not reassignment.
 
-let only for loop counters, html strings built with +=, counters, the matches flag in getFilteredEvidence, hash in handleHashChange, events in renderTimeline, modal in openEvidenceModal and latestSearchRequestId. viewRendered in state.js changed to "export const" since only its properties change.
-
-Checked with a script for bindings used outside their new block scope or before their declaration -> no real cases. All views still render.
+let only for loop counters, html strings built with +=, counters, the matches flag in getFilteredEvidence, hash in handleHashChange, events in renderTimeline, modal in openEvidenceModal and latestSearchRequestId.
 
 ### Code smells
 
@@ -140,7 +138,7 @@ Checked with a script for bindings used outside their new block scope or before 
 
 ### Q1
 
-var is function scoped and can be redeclared and reassigned. let is block scoped and can be reassigned, const is block scoped and can't be reassigned (object contents can still change).
+var is function scoped and can be redeclared and reassigned. let is block scoped and can be reassigned, const is block scoped and can't be reassigned (but object contents can still change).
 
 Bug from this app: the original nav button loop in app.js used "for (var i ...)" and read navButtons[i] inside the click callback. All callbacks share one i which is 5 when clicked -> navButtons[5] is undefined -> TypeError on every nav click. With let every iteration gets its own i and the callback reads the right button.
 
@@ -150,6 +148,54 @@ In non-strict code assigning to an undeclared name ("count = 0" without let/cons
 
 ### Q3
 
-The loop counters: renderTimeline used i, e, el, ev2, b and populateEvidenceDropdowns i, ti, p, l. It worked, but the names only existed because var is function scoped and reusing i would share one variable. A reader has to check each name for meaning and nobody sees at a glance which loop it belongs to -> slower onboarding and review. With let every loop can use i.
+The loop counters: renderTimeline used i, e, el, ev2, b and populateEvidenceDropdowns i, ti, p, l. It worked, but the names only existed because var is function scoped and reusing i would share one variable. A reader has to check each name for meaning and nobody sees at a glance which loop it belongs to -> slower review. With let every loop can use i.
 
-Same for the write-only selectedEvidence/currentPeopleTab: nothing broke, but a reader has to search the whole app to find out they do nothing.
+Same for the write-only selectedEvidence/currentPeopleTab: nothing brokehad to search the whole app to find out they do nothing.
+
+## Demo 9
+
+### Nested chain
+
+loadCorePeopleAndLocations (data-loading.js) was the deepest chain, 6 levels:
+
+fetch case -> json -> fetch people -> json -> fetch locations -> json -> hideLoadingStep, renderDashboard, populateAllDropdowns
+
+Each level only starts after the previous promise resolved, so the requests run one after another. It has no catch, a failure anywhere skips everything after it and rejects the promise loadAllData returns.
+
+### Refactor
+
+- loadCorePeopleAndLocations -> async function with one await per fetch and per json(), still sequential.
+- loadEvidenceData -> .then/.catch became try/catch, same console.error, flag reset and alert.
+- loadTimelineData -> .then/.catch/.finally became try/catch/finally, hideLoadingStep still runs in finally.
+- loadAllData -> awaits the core files, then starts evidence and timeline without awaiting them, same as before
+
+Left as they were: app.js initApp and handleSearchInput in evidence-catalogue.js.
+
+Verified with a trace of fetch start/finish, renders, overlay, logs and alerts, before vs after. Identical for normal loading, evidence.json failing, timeline.json failing and people.json failing. Debugger check: breakpoint on the first await in loadCorePeopleAndLocations, step over each await with the Call Stack open.
+
+### Q1
+
+The nested version grows sideways, every step is one more callback inside the previous one, and the variables of each level are only visible inside it. To see what runs after people.json you have to count brackets, and whether an error is handled means following returns through 6 levels. The async version reads top to bottom in the same order it executes, and error handling is one visible try/catch.
+
+### Q2
+
+await pauses only the async function it is in until the promise settles, then continues it with the result (or throws the rejection). The function returns a promise to its caller at the first await. The rest of the program keeps running meanwhile: initApp returns, event handlers can run, the browser renders. The main thread isn't blocked.
+
+### Q3
+
+loadAllData() returns a Promise even though it has no return statement. loadAllData().then(v => console.log(v)) logs undefined, because the function resolves with its return value and it doesn't return one. An async function with "return 5" logs 5 in .then, not a Promise.
+
+### Q4
+
+try/catch around the await. Without it the rejection is thrown inside the async function, which rejects the promise it returned. If nobody handles that promise the browser reports "Uncaught (in promise)". In this app: people.json failing in loadCorePeopleAndLocations -> unhandled rejection, overlay stays and handleHashChange in app.js never runs because its .then has no catch.
+
+### Q5
+
+No. Same promises, same requests, same order, the trace is identical. Only the way the code is written changes. The requests are still sequential, only running them in parallel (Promise.all) would make loading faster.
+
+### Q6
+
+- Removed await from caseRes.json() -> caseJson is a Promise, setCaseData stores the Promise, no error. Dashboard shows the fallback title "Case" and status "UNKNOWN" because the Promise has no title or status.
+- Removed await from fetch("data/case.json") -> caseRes is a Promise, caseRes.json() throws "caseRes.json is not a function" -> rejection, app stuck on the overlay.
+
+Same category as loadNoteAsync in app.js: it returns a Promise that is logged directly, so the console shows "Promise {...}" instead of the note text. Also the Demo 5 people count: loadAllData doesn't wait for loadEvidenceData, so handleHashChange uses allEvidence before it exists.
