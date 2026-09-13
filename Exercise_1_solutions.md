@@ -79,3 +79,37 @@ Sorting evidence by age or title does not work. evidence-catalogue.js:169 handle
 
 Solution: Split the sorting function and the rendering call, so the list is rendered after filtering. "handleSortChange()" is no longer responsible for sorting the results, it only calls "renderEvidenceList()" which calls "sortResults()". 
 Sort now runs on the same array that gets rendered.
+
+## Demo 7
+
+### Q1
+
+Different log levels. The console level filter shows or hides them separately, warn and error get an expandable stack trace, count towards the warning or error badge, log doesn't. Monitoring tools only collect warn and error.
+In the app the levels are inconsistent, warn/error/log are used.
+
+### Q2
+
+evidence.json status 200 -> server found and returned the file. Type fetch -> requested by fetch(). Time -> total duration from request start to last byte.
+
+404: fetch() doesn't reject on HTTP errors, it resolves with response.ok = false. App never checks res.ok and calls res.json() on the 404 error page -> SyntaxError -> promise rejects.
+
+Different error handling troughout the app, console.log or error but no proper error handling/resolution.
+
+### Q3
+
+remotion_bookmarks -> array of bookmarked evidence ids
+remotion_hypothesis -> hypothesis draft object
+remotion_notes -> object evidenceId and its note text
+
+invalid JSON:
+- bookmarks -> app works, console.warn "Could not read stored bookmarks, starting empty". loadBookmarksFromStorage has try/catch and an Array.isArray check fallback to [].
+- notes -> app doesn't load. loadNotesFromStorage calls JSON.parse without try/catch and runs in initApp before setupEventListeners and loadAllData -> uncaught SyntaxError stops startup, overlay stays.
+- hypothesis -> only the workspace breaks.loadHypothesisFromStorage also parses without try/catch -> error after the bookmark and notes lists rendered, form isn't restored.
+
+### Q4
+
+Overlay shows first, case, people and locations load one after another, then evidence and timeline in parallel. handleHashChange also runs right after the core files, before evidence -> reloading on people renders every count as 0 and viewRendered keeps it that way.
+
+Order matters because every render uses whatever state exists at that moment. Views that re-render when data arrives fix themselves, views that render once freeze the empty values, and a loading indicator that doesn't track every request says done while data is missing.
+
+## Demo 8
