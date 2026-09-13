@@ -151,9 +151,7 @@ function handleBookmarkClick(evidenceId) {
     bookmarks.push(evidenceId);
     ev.bookmarked = true;
   } else {
-    setBookmarks(bookmarks.filter(function (id) {
-      return id !== evidenceId;
-    }));
+    setBookmarks(bookmarks.filter((id) => id !== evidenceId));
     ev.bookmarked = false;
   }
   saveBookmarksToStorage();
@@ -170,21 +168,13 @@ export function sortResults(items) {
   const sortValue = document.getElementById("sortEvidence").value;
 
   if (sortValue === "title-asc") {
-    items.sort(function (a, b) {
-      return a.title.localeCompare(b.title);
-    });
+    items.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortValue === "title-desc") {
-    items.sort(function (a, b) {
-      return b.title.localeCompare(a.title);
-    });
+    items.sort((a, b) => b.title.localeCompare(a.title));
   } else if (sortValue === "date-asc") {
-    items.sort(function (a, b) {
-      return new Date(a.timestamp) - new Date(b.timestamp);
-    });
+    items.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   } else {
-    items.sort(function (a, b) {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    });
+    items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   }
   return items;
 }
@@ -205,10 +195,8 @@ export function clearFilters() {
 }
 
 function simulateAsyncSearch(term) {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      resolve(term);
-    }, 300);
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(term), 300);
   });
 }
 
@@ -218,7 +206,7 @@ export function handleSearchInput(event) {
   const term = event.target.value;
   const requestId = ++latestSearchRequestId;
 
-  simulateAsyncSearch(term).then(function (resolvedTerm) {
+  simulateAsyncSearch(term).then((resolvedTerm) => {
     // Only apply this response if nothing newer has been typed meanwhile.
     if (requestId !== latestSearchRequestId) return;
     renderEvidenceList();

@@ -199,3 +199,55 @@ No. Same promises, same requests, same order, the trace is identical. Only the w
 - Removed await from fetch("data/case.json") -> caseRes is a Promise, caseRes.json() throws "caseRes.json is not a function" -> rejection, app stuck on the overlay.
 
 Same category as loadNoteAsync in app.js: it returns a Promise that is logged directly, so the console shows "Promise {...}" instead of the note text. Also the Demo 5 people count: loadAllData doesn't wait for loadEvidenceData, so handleHashChange uses allEvidence before it exists.
+
+## Demo 10
+
+### Refactor
+
+Converted all 23 anonymous callbacks to arrow functions:
+
+- sort and filter callbacks -> sortResults and handleBookmarkClick (evidence-catalogue.js), renderTimeline sort, bookmarks filter in workspace.js
+- addEventListener callbacks -> nav buttons and confidence slider (app.js), status/relevance selects (evidence-detail.js), "view" links (peopleAndLocations.js), "View Exx" buttons (timeline.js), "Open" buttons (workspace.js)
+- setTimeout callbacks, the Promise executors in simulateAsyncSearch and loadNoteAsync, the .then callbacks in initApp and handleSearchInput
+
+One-expression callbacks use the short form, e.g. bookmarks.filter((id) => id !== evidenceId). Named functions stay function declarations.
+
+Checked first: no callback uses this or arguments and no app function is called with new. Demo 8 and 9 tests identical before vs after, plus search typing, bookmark on/off, confidence slider and loadNoteAsync.
+
+### Not converted
+
+navigateTo (navigation.js). navigation.js is in import cycles with timeline.js, peopleAndLocations.js, workspace.js and evidence-catalogue.js. As a function declaration the binding exists as soon as the modules are linked, as "export const navigateTo = () => ..." only once navigation.js has run.
+
+Today every read happens later so it would still work. Tested: moving "window.navigateTo = navigateTo" to the top of timeline.js or peopleAndLocations.js -> "ReferenceError: Cannot access 'navigateTo' before initialization", app doesn't start. Same line with the function declaration works.
+
+### Q1
+
+A regular function gets its this from how it is called: obj.method() -> obj, as an event listener -> the element, plain call in a module -> undefined. An arrow function has no own this, it uses the this of the code around it and call/bind can't change it.
+
+As an object method that breaks: const counter = { count: 0, increment: () => this.count++ } -> this is not counter but the surrounding this (undefined in a module) -> TypeError. As a callback it is the point: inside a method, setTimeout(() => this.render(), 0) keeps the method's this, a function() callback would lose it. No code in this app uses this, callbacks read e.target/e.currentTarget.
+
+### Q2
+
+Neither. No function uses arguments and new is only used on built-ins (new Date, new Promise). The executor passed to new Promise can be an arrow because new is applied to Promise, not to the executor.
+
+### Q3
+
+Not for what I converted. The callbacks are created exactly where they are passed, nothing calls them by name earlier. For module-level functions order in the file wouldn't matter either as long as they are only called after the module ran (certaintyBadgeClass is defined below renderTimeline which uses it). It does matter in the import cycles, see "Not converted".
+
+### Q4
+
+Before:
+setBookmarks(bookmarks.filter(function (id) {
+  return id !== evidenceId;
+}));
+
+After:
+setBookmarks(bookmarks.filter((id) => id !== evidenceId));
+
+No runtime difference. Arrows only differ in this, arguments, new and prototype and the callback uses none of them. filter calls it the same way and evidenceId comes from the closure in both. Readability only, bookmark on/off gives the same result before and after.
+
+### Q5
+
+Function declarations for named functions at module level (exports, handlers passed by name like handleModalClick). Arrow functions for inline callbacks (event listeners, array methods, setTimeout, .then, Promise executors). Never arrows for object methods or anything that needs its own this.
+
+Declarations are hoisted and initialized when modules are linked, so they are safe in import cycles, helpers can sit below the code using them and they have a name in stack traces. Arrows keep callbacks short and never surprise with this. This is the rule the code follows now.

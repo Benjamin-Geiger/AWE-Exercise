@@ -41,7 +41,5 @@ export function loadNotesFromStorage() {
 }
 
 export function loadNoteAsync(evidenceId) {
-  return new Promise(function (resolve) {
-    resolve(notesStore[evidenceId] || "");
-  });
+  return new Promise((resolve) => resolve(notesStore[evidenceId] || ""));
 }

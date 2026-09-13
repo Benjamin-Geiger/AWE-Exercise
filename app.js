@@ -21,7 +21,7 @@ function setupEventListeners() {
 
   const navButtons = document.querySelectorAll(".nav-btn");
   for (let i = 0; i < navButtons.length; i++) {
-    navButtons[i].addEventListener("click", function (event) {
+    navButtons[i].addEventListener("click", (event) => {
       const targetView = event.currentTarget.getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
@@ -44,7 +44,7 @@ function setupEventListeners() {
   document.getElementById("timelineLocationFilter").addEventListener("change", renderTimeline);
   document.getElementById("timelineTypeFilter").addEventListener("change", renderTimeline);
 
-  document.getElementById("hypConfidence").addEventListener("input", function (e) {
+  document.getElementById("hypConfidence").addEventListener("input", (e) => {
     document.getElementById("hypConfidenceValue").textContent = e.target.value;
   });
 }
@@ -65,7 +65,7 @@ function initApp() {
   loadNotesFromStorage();
   setupEventListeners();
 
-  loadAllData().then(function () {
+  loadAllData().then(() => {
     handleHashChange();
     const firstNote = loadNoteAsync("E01");
     console.log("First note preview:", firstNote);

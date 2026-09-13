@@ -19,9 +19,7 @@ function renderBookmarksList() {
   const container = document.getElementById("bookmarksList");
   if (!container) return;
 
-  const bookmarkedItems = allEvidence.filter(function (ev) {
-    return ev.bookmarked;
-  });
+  const bookmarkedItems = allEvidence.filter((ev) => ev.bookmarked);
 
   if (bookmarkedItems.length === 0) {
     container.innerHTML = "<p>No bookmarked evidence yet. Bookmark items from the Evidence view.</p>";
@@ -38,12 +36,10 @@ function renderBookmarksList() {
 
   const openButtons = container.querySelectorAll("[data-open-evidence]");
   for (let b = 0; b < openButtons.length; b++) {
-    openButtons[b].addEventListener("click", function (e) {
+    openButtons[b].addEventListener("click", (e) => {
       navigateTo("evidence");
       const id = e.target.getAttribute("data-open-evidence");
-      setTimeout(function () {
-        openEvidenceDetail(id);
-      }, 0);
+      setTimeout(() => openEvidenceDetail(id), 0);
     });
   }
 }
@@ -113,9 +109,7 @@ export function saveHypothesis() {
 
   const msg = document.getElementById("hypothesisSavedMsg");
   msg.classList.remove("hidden");
-  setTimeout(function () {
-    msg.classList.add("hidden");
-  }, 2000);
+  setTimeout(() => msg.classList.add("hidden"), 2000);
 }
 
 function getSelectedOptions(selectEl) {

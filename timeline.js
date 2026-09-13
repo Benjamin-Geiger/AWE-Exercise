@@ -50,7 +50,7 @@ export function renderTimeline() {
     events.push(evt);
   }
 
-  events = events.slice().sort(function (a, b) {
+  events = events.slice().sort((a, b) => {
     const diff = new Date(a.time) - new Date(b.time);
     return order === "desc" ? -diff : diff;
   });
@@ -84,7 +84,7 @@ export function renderTimeline() {
 
   const linkButtons = container.querySelectorAll(".evidence-link-btn");
   for (let b = 0; b < linkButtons.length; b++) {
-    linkButtons[b].addEventListener("click", function (e) {
+    linkButtons[b].addEventListener("click", (e) => {
       openEvidenceModal(e.target.getAttribute("data-evidence-id"));
     });
   }
@@ -130,8 +130,6 @@ function handleModalClick(e) {
   if (openId) {
     modal.innerHTML = "";
     navigateTo("evidence");
-    setTimeout(function () {
-      openEvidenceDetail(openId);
-    }, 0);
+    setTimeout(() => openEvidenceDetail(openId), 0);
   }
 }

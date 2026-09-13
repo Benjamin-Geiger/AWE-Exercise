@@ -85,12 +85,12 @@ function renderEvidenceDetail(ev) {
 
   section.innerHTML = html;
 
-  document.getElementById("detailStatusSelect").addEventListener("change", function (e) {
+  document.getElementById("detailStatusSelect").addEventListener("change", (e) => {
     ev.status = e.target.value; // direct mutation of the loaded evidence object
     renderEvidenceDetail(ev);
     if (viewRendered.evidence) renderEvidenceList();
   });
-  document.getElementById("detailRelevanceSelect").addEventListener("change", function (e) {
+  document.getElementById("detailRelevanceSelect").addEventListener("change", (e) => {
     ev.relevance = e.target.value;
     renderEvidenceDetail(ev);
     if (viewRendered.evidence) renderEvidenceList();
