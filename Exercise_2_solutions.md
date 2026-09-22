@@ -235,44 +235,19 @@ only globally installed: the bare command might still resolve from the global PA
 
 Task 1:
 
-npm install --save-dev typescript -> typescript 7.0.2, devDependency (does not ship to the browser, §8.5)
+npm install --save-dev typescript -> added tsconfig.json, based on strict browser-oriented configuration (10.17)
 
-added tsconfig.json, based on the "strict browser-oriented configuration" from §10.17
+strict:true -> Family of stronger checks including nullability and implicit-any analysis.
 
-```
-target ES2022                      syntax level, Vite targets modern browsers
-lib ES2022 + DOM + DOM.Iterable    app is built on document/window/localStorage
-module ESNext
-moduleResolution Bundler           matches how Vite resolves imports
-strict true
-noUncheckedIndexedAccess true
-exactOptionalPropertyTypes true
-noEmit true                        tsc only analyses, Vite transforms
-isolatedModules true
-allowJs true                       added, not in 10.17
-checkJs false                      left off on purpose
-include ["src"]
-```
+allowJs -> on, and it is NOT in the manuscript config. Needed because .js and .ts have to coexist during conversion. Without it tsc reports no inputs found
 
-settings I can justify:
+tsc --noEmit runs as a dedicated type checking step, because successful transformation does not mean the program is type correct (10.1)
 
-strict -> on. Family of stronger checks including nullability and implicit-any analysis (§10.17). Demo 5 requires converting with no `any`, noImplicitAny is what enforces that.
+Task 2:
 
-noUncheckedIndexedAccess -> on. arr[i] is typed T | undefined instead of T. This codebase is full of index loops (ev.personIds[p], navButtons[i]), so this is the setting that will actually produce the "possibly undefined" findings Demo 7 asks for.
+notesStore -> {} (object with no known properties), notesStore[evidenceID] in storageHelpers.ts woudn't compile
+"Element implicitly has an 'any' type because expression of type '"E01"'can't be used to index type '{}'"
 
-allowJs -> on, and it is NOT in the manuscript config. Needed because .js and .ts have to coexist while Demos 5-7 convert module by module. TypeScript can be introduced incrementally, JavaScript and TypeScript files may coexist (§10.19). Without it tsc reports "no inputs found" because there is no .ts file yet.
+storageHelpers.ts:38 needs || "" to satisfy the string return type.
 
-checkJs -> left off on purpose. Turning it on would type check all 12 untyped .js modules at once before any of them are converted. §10.19 sequence: establish the toolchain, type stable module boundaries, model domain values, then reduce escape hatches.
-
-noEmit -> tsc is only the checker here. In many frontend projects a build tool transforms TypeScript quickly while tsc --noEmit runs as a dedicated type checking step, because successful transformation does not mean the program is type correct (§10.1).
-
-verification:
-
-""
-npx tsc --noEmit
-exit: 0
-""
-
---listFiles shows all 12 .js modules are picked up (allowJs) but none are checked (checkJs off) -> clean baseline before converting anything.
-
-## Demo 5
+allEvidence infers as any[], so allEvidence[i] is any and produces no error at al. HasId enables type check, either string id or null.
