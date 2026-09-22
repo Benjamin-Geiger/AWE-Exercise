@@ -293,3 +293,4 @@ e.g.: allEvidence comes from untyped state.js and infers as any[], so allEvidenc
 
 if a value returns any every future caller looses checking too. So its faster now and much more work later.
 
+## Demo 6
