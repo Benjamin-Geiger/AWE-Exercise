@@ -4,7 +4,7 @@ import {
   clearFilters,
   handleSearchInput,
   handleSortChange,
-  renderEvidenceList
+  renderEvidenceList,
 } from "../view/evidence-catalogue.js";
 import { renderTimeline } from "../view/timeline.js";
 import { loadBookmarksFromStorage, loadNotesFromStorage, loadNoteAsync } from "./storageHelpers.js";

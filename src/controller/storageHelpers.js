@@ -2,8 +2,12 @@
 // LOCAL STORAGE HELPERS (bookmarks & notes)
 // ---------------------------------------------------------------------
 import {
-  STORAGE_KEY_BOOKMARKS, STORAGE_KEY_NOTES, bookmarks, notesStore,
-  setBookmarks, setNotesStore
+  STORAGE_KEY_BOOKMARKS,
+  STORAGE_KEY_NOTES,
+  bookmarks,
+  notesStore,
+  setBookmarks,
+  setNotesStore,
 } from "./state.js";
 
 export function saveBookmarksToStorage() {

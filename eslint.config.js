@@ -3,7 +3,7 @@ import globals from "globals";
 import prettier from "eslint-config-prettier";
 
 export default [
-  // Never lint generated or installed code dist/ 
+  // Never lint generated or installed code dist/
   { ignores: ["dist/", "node_modules/"] },
 
   // base ruleset: unused variables, unreachable code, duplicate keys, etc.
@@ -15,8 +15,8 @@ export default [
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module", // modules: import/export
-      globals: globals.browser // document, window, fetch, localStorage
-    }
+      globals: globals.browser, // document, window, fetch, localStorage
+    },
   },
 
   {
@@ -24,10 +24,10 @@ export default [
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
-      globals: globals.node
-    }
+      globals: globals.node,
+    },
   },
 
   // prettier last to avoid conflicts with other rules
-  prettier
+  prettier,
 ];

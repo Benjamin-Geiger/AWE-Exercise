@@ -1,13 +1,27 @@
 // ---------------------------------------------------------------------
 // EVIDENCE CATALOGUE
 // ---------------------------------------------------------------------
-import { findEvidenceById, findPersonById, getRelevanceBadgeClass, getStatusBadgeClass, formatDate, evidenceMentionsPerson } from "../controller/lookup-utilities.js";
+import {
+  findEvidenceById,
+  findPersonById,
+  getRelevanceBadgeClass,
+  getStatusBadgeClass,
+  formatDate,
+  evidenceMentionsPerson,
+} from "../controller/lookup-utilities.js";
 import { saveBookmarksToStorage } from "../controller/storageHelpers.js";
 import { openEvidenceDetail } from "../controller/evidence-detail.js";
 import { populateHypothesisDropdowns } from "./workspace.js";
 import {
-  allEvidence, filteredEvidence, bookmarks, currentPage, evidenceViewLoading,
-  setFilteredEvidence, setBookmarks, allPeople, allLocations
+  allEvidence,
+  filteredEvidence,
+  bookmarks,
+  currentPage,
+  evidenceViewLoading,
+  setFilteredEvidence,
+  setBookmarks,
+  allPeople,
+  allLocations,
 } from "../controller/state.js";
 import { populateTimelineDropdowns } from "./timeline.js";
 
@@ -35,12 +49,20 @@ function populateEvidenceDropdowns() {
 
   personSelect.innerHTML = '<option value="">All people</option>';
   for (let p = 0; p < allPeople.length; p++) {
-    personSelect.innerHTML += '<option value="' + allPeople[p].id + '">' + allPeople[p].name + "</option>";
+    personSelect.innerHTML +=
+      '<option value="' + allPeople[p].id + '">' + allPeople[p].name + "</option>";
   }
 
   locationSelect.innerHTML = '<option value="">All locations</option>';
   for (let l = 0; l < allLocations.length; l++) {
-    locationSelect.innerHTML += '<option value="' + allLocations[l].id + '">' + allLocations[l].id + " - " + allLocations[l].name + "</option>";
+    locationSelect.innerHTML +=
+      '<option value="' +
+      allLocations[l].id +
+      '">' +
+      allLocations[l].id +
+      " - " +
+      allLocations[l].name +
+      "</option>";
   }
 }
 
@@ -69,7 +91,8 @@ function getFilteredEvidence() {
     }
     if (matches && locationVal && item.locationIds.indexOf(locationVal) === -1) matches = false;
     if (matches && statusVal && (item.status || "").toLowerCase() !== statusVal) matches = false;
-    if (matches && relevanceVal && (item.relevance || "").toLowerCase() !== relevanceVal) matches = false;
+    if (matches && relevanceVal && (item.relevance || "").toLowerCase() !== relevanceVal)
+      matches = false;
 
     if (matches) results.push(item);
   }
@@ -105,20 +128,36 @@ export function renderEvidenceList() {
   container.addEventListener("click", handleEvidenceListClick);
 }
 
-
 function renderEvidenceCardHTML(ev) {
   const isBookmarked = bookmarks.indexOf(ev.id) !== -1;
   let html = '<div class="evidence-card" data-id="' + ev.id + '">';
-  html += '<button class="bookmark-btn ' + (isBookmarked ? "active" : "") + '" data-action="bookmark" data-id="' + ev.id + '" aria-label="Toggle bookmark for ' + ev.title + '"><span class="bookmark-icon">' + (isBookmarked ? "★" : "☆") + "</span></button>";
+  html +=
+    '<button class="bookmark-btn ' +
+    (isBookmarked ? "active" : "") +
+    '" data-action="bookmark" data-id="' +
+    ev.id +
+    '" aria-label="Toggle bookmark for ' +
+    ev.title +
+    '"><span class="bookmark-icon">' +
+    (isBookmarked ? "★" : "☆") +
+    "</span></button>";
   html += "<h3>" + ev.title + "</h3>";
-  html += '<div class="evidence-meta">' + ev.id + " &middot; " + ev.type + " &middot; " + formatDate(ev.timestamp) + "</div>";
+  html +=
+    '<div class="evidence-meta">' +
+    ev.id +
+    " &middot; " +
+    ev.type +
+    " &middot; " +
+    formatDate(ev.timestamp) +
+    "</div>";
   html += '<div class="evidence-summary">' + ev.summary + "</div>";
 
   if (ev.tags.indexOf("critical") !== -1) {
     html += '<span class="badge badge-critical">Critical</span>';
   }
   html += '<span class="badge ' + getStatusBadgeClass(ev.status) + '">' + ev.status + "</span>";
-  html += '<span class="badge ' + getRelevanceBadgeClass(ev.relevance) + '">' + ev.relevance + "</span>";
+  html +=
+    '<span class="badge ' + getRelevanceBadgeClass(ev.relevance) + '">' + ev.relevance + "</span>";
   html += "<div>";
   for (let t = 0; t < ev.tags.length; t++) {
     html += '<span class="tag-chip">' + ev.tags[t] + "</span>";
@@ -182,7 +221,6 @@ export function sortResults(items) {
 export function handleSortChange() {
   renderEvidenceList();
 }
-
 
 export function clearFilters() {
   document.getElementById("evidenceSearch").value = "";

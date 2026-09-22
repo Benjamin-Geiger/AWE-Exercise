@@ -1,13 +1,26 @@
 // ---------------------------------------------------------------------
 // DATA LOADING
 // ---------------------------------------------------------------------
-import { populateAllDropdowns, renderEvidenceList, applyStoredBookmarkFlags } from "../view/evidence-catalogue.js";
+import {
+  populateAllDropdowns,
+  renderEvidenceList,
+  applyStoredBookmarkFlags,
+} from "../view/evidence-catalogue.js";
 import { renderDashboard } from "../view/dashboard.js";
 import { renderTimeline } from "../view/timeline.js";
 import {
-  setCaseData, setAllPeople, setAllLocations, setAllEvidence, setFilteredEvidence,
-  setAllTimeline, currentPage, loadingStepsRemaining, setLoadingStepsRemaining,
-  decrementLoadingStepsRemaining, allEvidence, setEvidenceViewLoading
+  setCaseData,
+  setAllPeople,
+  setAllLocations,
+  setAllEvidence,
+  setFilteredEvidence,
+  setAllTimeline,
+  currentPage,
+  loadingStepsRemaining,
+  setLoadingStepsRemaining,
+  decrementLoadingStepsRemaining,
+  allEvidence,
+  setEvidenceViewLoading,
 } from "./state.js";
 
 function showLoadingOverlay(msg) {

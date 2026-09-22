@@ -170,3 +170,29 @@ The development server is a tool, not the deployed application. Previewing devel
 Development favours fast feedback and readable diagnostics. Production favours compatibility, caching, and reduced transfer and processing cost (7.2).
 
 dev server serves unbundled source on demand -> no bundling, no minification, no hashes -> many requests, bigger transfer, no long term caching. Also ships the HMR client + websocket, which has no purpose for a user.
+
+## Demo 4
+
+npm install --save-dev eslint @eslint/js globals prettier eslint-config-prettier -> linter with rules to disjoin prettier and eslint
+
+added eslin.config.js
+
+Added scripts to package.json:
+"lint": "eslint .",
+"lint:fix": "eslint . --fix",
+"format": "prettier --write .",
+"format:check": "prettier --check ."
+
+""
+npm run lint
+
+> awe-exercise@1.0.0 lint
+> eslint .
+
+
+E:\Projects\AWE-Exercise\src\view\evidence-catalogue.js
+    9:16  error  'filteredEvidence' is defined but never used  no-unused-vars
+  209:35  error  'resolvedTerm' is defined but never used      no-unused-vars
+
+✖ 2 problems (2 errors, 0 warnings)
+""
