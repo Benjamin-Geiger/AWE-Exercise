@@ -1,10 +1,13 @@
 {
   "name": "awe-exercise",
   "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "description": "Investigate the failure of an AI-assisted rehabilitation robot.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
