@@ -5,11 +5,11 @@ import {
   handleSearchInput,
   handleSortChange,
   renderEvidenceList
-} from "./evidence-catalogue.js";
-import { renderTimeline } from "./timeline.js";
+} from "../view/evidence-catalogue.js";
+import { renderTimeline } from "../view/timeline.js";
 import { loadBookmarksFromStorage, loadNotesFromStorage, loadNoteAsync } from "./storageHelpers.js";
-import { saveHypothesis } from "./workspace.js";
-import { switchPeopleTab } from "./peopleAndLocations.js";
+import { saveHypothesis } from "../view/workspace.js";
+import { switchPeopleTab } from "../view/peopleAndLocations.js";
 import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
 
 // ---------------------------------------------------------------------

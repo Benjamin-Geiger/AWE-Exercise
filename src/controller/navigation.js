@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------
 // NAVIGATION / HASH ROUTING
 // ---------------------------------------------------------------------
-import { renderDashboard } from "./dashboard.js";
-import { renderEvidenceList } from "./evidence-catalogue.js";
-import { renderPeople, renderLocations } from "./peopleAndLocations.js";
-import { renderTimeline } from "./timeline.js";
-import { renderWorkspace } from "./workspace.js";
+import { renderDashboard } from "../view/dashboard.js";
+import { renderEvidenceList } from "../view/evidence-catalogue.js";
+import { renderPeople, renderLocations } from "../view/peopleAndLocations.js";
+import { renderTimeline } from "../view/timeline.js";
+import { renderWorkspace } from "../view/workspace.js";
 import { viewRendered, setCurrentPage, setViewRendered } from "./state.js";
 
 export function navigateTo(viewName) {

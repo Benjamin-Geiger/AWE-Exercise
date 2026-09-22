@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------
 // WORKSPACE
 // ---------------------------------------------------------------------
-import { navigateTo } from "./navigation.js";
-import { openEvidenceDetail } from "./evidence-detail.js";
-import { escapeHtml } from "./lookup-utilities.js";
+import { navigateTo } from "../controller/navigation.js";
+import { openEvidenceDetail } from "../controller/evidence-detail.js";
+import { escapeHtml } from "../controller/lookup-utilities.js";
 import {
   allEvidence, allPeople, notesStore, STORAGE_KEY_HYPOTHESIS
-} from "./state.js";
+} from "../controller/state.js";
 
 export function renderWorkspace() {
   renderBookmarksList();

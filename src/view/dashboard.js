@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------
 // DASHBOARD
 // ---------------------------------------------------------------------
-import { formatDate, getStatusBadgeClass } from "./lookup-utilities.js";
-import { allEvidence, allPeople, allLocations, bookmarks, caseData, allTimeline } from "./state.js";
+import { formatDate, getStatusBadgeClass } from "../controller/lookup-utilities.js";
+import { allEvidence, allPeople, allLocations, bookmarks, caseData, allTimeline } from "../controller/state.js";
 
 export function renderDashboard() {
   const container = document.getElementById("dashboardContent");

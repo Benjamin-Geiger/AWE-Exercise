@@ -1,10 +1,10 @@
 // ---------------------------------------------------------------------
 // PEOPLE & LOCATIONS
 // ---------------------------------------------------------------------
-import { evidenceMentionsPerson } from "./lookup-utilities.js";
-import { navigateTo } from "./navigation.js";
+import { evidenceMentionsPerson } from "../controller/lookup-utilities.js";
+import { navigateTo } from "../controller/navigation.js";
 import { renderEvidenceList } from "./evidence-catalogue.js";
-import { allEvidence, allPeople, allLocations } from "./state.js";
+import { allEvidence, allPeople, allLocations } from "../controller/state.js";
 
 export function switchPeopleTab(tab) {
   const peoplePanel = document.getElementById("peoplePanel");

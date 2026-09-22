@@ -1,14 +1,14 @@
 // ---------------------------------------------------------------------
 // EVIDENCE CATALOGUE
 // ---------------------------------------------------------------------
-import { findEvidenceById, findPersonById, getRelevanceBadgeClass, getStatusBadgeClass, formatDate, evidenceMentionsPerson } from "./lookup-utilities.js";
-import { saveBookmarksToStorage } from "./storageHelpers.js";
-import { openEvidenceDetail } from "./evidence-detail.js";
+import { findEvidenceById, findPersonById, getRelevanceBadgeClass, getStatusBadgeClass, formatDate, evidenceMentionsPerson } from "../controller/lookup-utilities.js";
+import { saveBookmarksToStorage } from "../controller/storageHelpers.js";
+import { openEvidenceDetail } from "../controller/evidence-detail.js";
 import { populateHypothesisDropdowns } from "./workspace.js";
 import {
   allEvidence, filteredEvidence, bookmarks, currentPage, evidenceViewLoading,
   setFilteredEvidence, setBookmarks, allPeople, allLocations
-} from "./state.js";
+} from "../controller/state.js";
 import { populateTimelineDropdowns } from "./timeline.js";
 
 export function populateAllDropdowns() {

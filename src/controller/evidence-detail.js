@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------
 import { findEvidenceById, findLocationById, findPersonById, formatDate, escapeHtml } from "./lookup-utilities.js";
 import { loadNoteForEvidence, saveNoteForEvidence } from "./storageHelpers.js";
-import { renderEvidenceList } from "./evidence-catalogue.js";
+import { renderEvidenceList } from "../view/evidence-catalogue.js";
 import { viewRendered } from "./state.js";
 
 export function openEvidenceDetail(evidenceId) {

@@ -1,10 +1,10 @@
 // ---------------------------------------------------------------------
 // TIMELINE
 // ---------------------------------------------------------------------
-import { findEvidenceById, findLocationById, formatDate } from "./lookup-utilities.js";
-import { navigateTo } from "./navigation.js";
-import { openEvidenceDetail } from "./evidence-detail.js";
-import { allPeople, allLocations, allTimeline } from "./state.js";
+import { findEvidenceById, findLocationById, formatDate } from "../controller/lookup-utilities.js";
+import { navigateTo } from "../controller/navigation.js";
+import { openEvidenceDetail } from "../controller/evidence-detail.js";
+import { allPeople, allLocations, allTimeline } from "../controller/state.js";
 
 export function populateTimelineDropdowns() {
   const personSelect = document.getElementById("timelinePersonFilter");
