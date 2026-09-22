@@ -84,3 +84,58 @@ Vite serves application source through the browser's module system and uses inde
 From index.html it can flowwow the `<script type="module">` into src/ and ktherefore knows every module and who imports whom. That graph is what module resolution, on demand transforms, and HMR boundaries are built on.
 
 Single `<script>` version -> no imports, no graph, one file. There is nothing to resolve per module, no boundaries, everything re runs on every change.
+
+## Demo 3
+
+""
+$npm run build
+
+> awe-exercise@1.0.0 build
+> vite build
+
+vite v8.3.0 building client environment for production...
+✓ 16 modules transformed.
+computing gzip size...
+dist/index.html                 10.77 kB │ gzip: 2.77 kB
+dist/assets/index-ZAWMSz9M.css  11.44 kB │ gzip: 2.77 kB
+dist/assets/index-C7ySWQbp.js   22.19 kB │ gzip: 6.23 kB
+
+✓ built in 176ms$
+""
+
+-->
+dist/
+  index.html
+  assets/
+    index-C8x2mL9a.js
+    index-Dq91nR4p.css
+
+<script type="module" crossorigin src="/assets/index-C7ySWQbp.js"></script>
+<link rel="stylesheet" crossorigin href="/assets/index-ZAWMSz9M.css">
+
+Public files are copied verbatim and get no hash, bc nothing imports them
+
+Task 2:
+
+npm run preview
+
+> awe-exercise@1.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+
+"Development mode and production mode use different performance
+and optimisation paths. A page that works through the dev server
+can still fail after bundling because of base paths, asset URLs,
+environment variables, or assumptions about module boundaries.
+Always inspect and preview the production build." (Manifest 8.10)
+
+Task 3:
+
+dist\assets\index-C7ySWQbp.js -> is the bundled and minified version of all 12 js files. No imports -> already resolved and inlined.(12 js modules bundled & hashed -> index-C7ySWQbp.js 22,195 Bytes)
+
+dist\assets\index-ZAWMSz9M.css -> whitespace and comments are stripped, formatted one liner (styles.css 15,355 Bytes, index-ZAWMSz9M.css 11,442 Bytes)
+
+Minification -> comments gone, whitespace collapsed & minified syntax
+
+### Questions 
