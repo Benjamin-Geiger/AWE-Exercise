@@ -198,3 +198,35 @@ E:\Projects\AWE-Exercise\src\view\evidence-catalogue.js
 ""
 
 --> removed both from evidence-catalogue.js
+
+### Questions
+
+#### Q1
+
+A formatter decides how code is laid out. Whitespace, line wrapping, quote style, trailing commas, indentation. A linter analyses code patterns that may be erroneous, inconsistent, or difficult to maintain. For example unused variables, unreachable code, unsafe equality, floating Promises (9.1).
+
+linter finding: 
+filteredEvidence defined but never used 
+resolvedTerm resolved but never used in evidence-catalogue.js. 
+--> prettier formated both lines --> lint flagged the problems
+
+after the format run the production build produced the exact same hashes as before (index-C7ySWQbp.js / index-ZAWMSz9M.css). After changing the linter problems -> rebuild -> new hash
+
+#### Q2
+
+CI should not silently rewrite source in a temporary runner and then report success. It should fail and require the corrected change to be committed -> quality gate behaviour from chapter 7 (§9.2, §7.4).
+
+when you want the non fixing version: --> when you want to see what is wrong before changing code
+the run must fail so the fix gets committed, not applied invisibly on the runner and thrown away
+
+--fix does not fix everything -> no-unused-vars is not auto fixable because removing a binding could change behaviour. I had to hand remove -> lint:fix left them.
+
+#### Q3
+
+Each property in scripts maps a short project command to a tool command. npm run dev looks up dev and runs vite (§8.3).
+
+So npm run lint looks up "lint" in package.json scripts and runs eslint.
+
+Package managers temporarily make executables from local dependencies available to scripts, so contributors do not need a separate global installation (§8.3). 
+
+only globally installed: the bare command might still resolve from the global PATH so it would look like it works, but the version is not the one in the lockfile, every contributor needs the same global install. CI has no globals at all, so global setup would fail there definetly.
