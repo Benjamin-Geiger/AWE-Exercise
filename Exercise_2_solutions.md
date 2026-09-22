@@ -196,3 +196,5 @@ E:\Projects\AWE-Exercise\src\view\evidence-catalogue.js
 
 ✖ 2 problems (2 errors, 0 warnings)
 ""
+
+--> removed both from evidence-catalogue.js

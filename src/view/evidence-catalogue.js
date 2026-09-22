@@ -14,7 +14,6 @@ import { openEvidenceDetail } from "../controller/evidence-detail.js";
 import { populateHypothesisDropdowns } from "./workspace.js";
 import {
   allEvidence,
-  filteredEvidence,
   bookmarks,
   currentPage,
   evidenceViewLoading,
@@ -244,7 +243,7 @@ export function handleSearchInput(event) {
   const term = event.target.value;
   const requestId = ++latestSearchRequestId;
 
-  simulateAsyncSearch(term).then((resolvedTerm) => {
+  simulateAsyncSearch(term).then(() => {
     // Only apply this response if nothing newer has been typed meanwhile.
     if (requestId !== latestSearchRequestId) return;
     renderEvidenceList();
