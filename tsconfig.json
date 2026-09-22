@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    // determines strictness, turns on 8 saftey checks, nullability checks
+    //stronger program correctness guarantees 
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noEmit": true,
+    // Ensures that each file can be transformed independently
+    // by tools that do not perform whole-program analysis.
+    "isolatedModules": true,
+    // required to allow js files alongside ts files
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["src"]
+}
