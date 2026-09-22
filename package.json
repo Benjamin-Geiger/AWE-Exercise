@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "description": "Investigate the failure of an AI-assisted rehabilitation robot.",
-  "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",

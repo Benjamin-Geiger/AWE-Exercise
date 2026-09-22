@@ -49,3 +49,13 @@ This project is currently quite small with few dependencies/ only 1 repo, so no 
 
 npm is normally installed together with Node.js and therefore has the lowest setup friction. pnpm is an extra install that every contributor and every CI runner must provision before anything else works.
 Migrating is a big "bulky" process: choose a manager, commit its lockfile, document its commands, and use the same choice in CI. You can not alternate between managers because their lockfiles and installation layouts differ. replacing package-lock.json with pnpm-lock.yaml and updating everything that comes with migration.
+
+## Demo 2
+
+Installed vite -> moved assets and data to /public -> vite convention
+Removed package.json placeholders
+
+Task 2 -> all views intact no visible changes or errors
+
+@lookup-utilites.js:22 adding: console.log("blabla"); -> reload
+@styles.css:13 changing to  --color-critical: #2bc04b; -> no reload
