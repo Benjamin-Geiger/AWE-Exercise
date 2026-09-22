@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Benjamin-Geiger/AWE-Exercise/issues"
   },
-  "homepage": "https://github.com/Benjamin-Geiger/AWE-Exercise#readme"
+  "homepage": "https://github.com/Benjamin-Geiger/AWE-Exercise#readme",
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
 }
