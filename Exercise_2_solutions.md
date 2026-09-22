@@ -138,4 +138,35 @@ dist\assets\index-ZAWMSz9M.css -> whitespace and comments are stripped, formatte
 
 Minification -> comments gone, whitespace collapsed & minified syntax
 
-### Questions 
+### Questions
+
+#### Q1
+
+The build resolves the dependency graph, transforms modules, bundles code, minifies output, rewrites asset references, and commonly emits content-hashed filenames.
+
+Transformations:
+
+bundling -> the 12 src modules end up as one index-C7ySWQbp.js. No import statements left, already resolved and inlined.
+
+minification -> styles.css 15,355 B -> 11,442 B. no comments no whitespace, one line
+
+hashed filenames -> index-C7ySWQbp.js / index-ZAWMSz9M.css
+
+asset references -> index.html points at the hashed names ->
+`<script type="module" crossorigin src="/assets/index-C7ySWQbp.js">`
+
+#### Q2
+
+Content hash changes when file content changes. Servers can cache hashed assets for a long time because a changed asset receives a new URL. The HTML entry point typically receives shorter caching because it points to the current asset names (8.11)
+
+with real deploys -> cache invalidation on deploy
+without hash the file is always index.js -> browser keeps serving the old cached copy after a deploy -> users get stale code
+with hash -> changed content = new filename = new URL -> browser has to fetch it. Unchanged files keep their URL and stay cached.
+
+#### Q3
+
+The development server is a tool, not the deployed application. Previewing development mode is also not the same as testing the production distribution (7.3).
+
+Development favours fast feedback and readable diagnostics. Production favours compatibility, caching, and reduced transfer and processing cost (7.2).
+
+dev server serves unbundled source on demand -> no bundling, no minification, no hashes -> many requests, bigger transfer, no long term caching. Also ships the HMR client + websocket, which has no purpose for a user.
