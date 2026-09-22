@@ -59,3 +59,28 @@ Task 2 -> all views intact no visible changes or errors
 
 @lookup-utilites.js:22 adding: console.log("blabla"); -> reload
 @styles.css:13 changing to  --color-critical: #2bc04b; -> no reload
+
+### Questions:
+
+#### Q1
+
+A plain static server just maps URLs to files. Vite understands the module graph, resolves bare imports from installed packages, transforms TypeScript syntax, injects HMR support, and reports build-time diagnostics. Transforms happen on demand, source is served through the browser's own module system.
+
+static server can't, injecti the HMR client. Vite adds `<script type="module" src="/@vite/client">` into index.html to opens a websocket
+
+#### Q2
+
+HMR replaces an affected module or reloads an appropriate boundary without performing a full page reload. Shortens feedback loops and preserves some runtime state.
+
+styles.css -> style swapped in place/ no reload -> state rentained
+lookup-utilities.js -> full page reload, app state lost
+
+Vite marks CSS as self-accepting automatically.JS module is only self-accepting if it calls import.meta.hot.accept. None of the modules do so changes to the js files alwayys trigger full reload.
+
+#### Q3
+
+Vite serves application source through the browser's module system and uses index.html as entry point. ES modules give it the import statements/ the graph it needs.
+
+From index.html it can flowwow the `<script type="module">` into src/ and ktherefore knows every module and who imports whom. That graph is what module resolution, on demand transforms, and HMR boundaries are built on.
+
+Single `<script>` version -> no imports, no graph, one file. There is nothing to resolve per module, no boundaries, everything re runs on every change.
