@@ -3,13 +3,10 @@
 // ---------------------------------------------------------------------
 import { allEvidence, allPeople, allLocations } from "./state.js";
 
-// Only the field these lookups actually read. The real Evidence/Person/
-// Location interfaces are Demo 6's job, state.js is still untyped.
 type HasId = { id: string };
 
 function findEvidenceById(id: string): HasId | null {
   for (let i = 0; i < allEvidence.length; i++) {
-    // noUncheckedIndexedAccess makes allEvidence[i] possibly undefined.
     const item = allEvidence[i];
     if (item && item.id === id) return item;
   }

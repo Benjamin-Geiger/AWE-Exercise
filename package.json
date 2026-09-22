@@ -6,12 +6,15 @@
   "description": "Investigate the failure of an AI-assisted rehabilitation robot.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "build": "npm run check && vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",

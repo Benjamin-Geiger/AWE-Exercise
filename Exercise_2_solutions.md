@@ -251,3 +251,10 @@ notesStore -> {} (object with no known properties), notesStore[evidenceID] in st
 storageHelpers.ts:38 needs || "" to satisfy the string return type.
 
 allEvidence infers as any[], so allEvidence[i] is any and produces no error at al. HasId enables type check, either string id or null.
+
+Task 3:
+
+Added typecheck to scripts in package.json. Rearanged script order so that fast diagnostics checks run before the build.
+
+## Questions
+

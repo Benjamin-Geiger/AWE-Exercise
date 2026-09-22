@@ -5,7 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     // determines strictness, turns on 8 saftey checks, nullability checks
-    //stronger program correctness guarantees 
+    //stronger program correctness guarantees
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
