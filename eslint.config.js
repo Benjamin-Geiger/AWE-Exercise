@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
 
 export default [
@@ -9,9 +10,12 @@ export default [
   // base ruleset: unused variables, unreachable code, duplicate keys, etc.
   js.configs.recommended,
 
+  // ts parser & rules, without .ts files are skipped
+  ...tseslint.configs.recommended,
+
   // Declaring the environment is what stops the linter from reporting the browser API as undefined variables
   {
-    files: ["src/**/*.js"],
+    files: ["src/**/*.{js,ts}"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module", // modules: import/export

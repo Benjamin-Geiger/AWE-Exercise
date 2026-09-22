@@ -258,3 +258,38 @@ Added typecheck to scripts in package.json. Rearanged script order so that fast 
 
 ## Questions
 
+#### Q1
+
+strict enables a family of stronger checks, including nullability and implicit-any analysis (10.17). It bundles 8 individual checks.
+
+noImplicitAny -> a parameter or variable that cannot be inferred is an error instead of becoming any. 
+
+strictNullChecks -> null and undefined are not silently accepted where another type is expected (10.8)
+
+keep both, allowing any makes ts kinda pointless
+
+#### Q2
+
+compile time error is found by analysing the program before it runs and yields same result every time.
+runtime bug -> only appears at runtime, code is valid but behaviour is wrong.
+
+TypeScript is effective at detecting mismatched contracts, missing properties, invalid union members, unsafe null access, incorrect callback signatures, and many inconsistent refactorings....
+TypeScript does not prove that a sorting algorithm is logically correct, that an event listener is registered the intended number of times, or that a network request arrives in the expected order (10.18)
+
+Exercise 1 bugs:
+
+Demo 4 bug -> "renderEvidenceList is not defined" , yes tsc catches missing names not found within current scope.
+
+Demo 2 -> allEvidence and filteredEvidence sharing one reference, both are evidence and their types are identical. ts wouldn't flag it 
+
+Demo 3 -> evidenceViewLoading never flipped to false. is a boolean either way.
+
+#### Q3
+
+any is contagious. Once a value becomes any, later property access, calls, and assignments are largely unchecked. Prefer unknown at uncertain boundaries and narrow it deliberately. Use any only as a local, temporary escape hatch with a clear reason (§10.7).
+
+it does not just skip an error, it switches checking off for that value and everything reached through it.
+e.g.: allEvidence comes from untyped state.js and infers as any[], so allEvidence[i].id produced no diagnostic at all.
+
+if a value returns any every future caller looses checking too. So its faster now and much more work later.
+
