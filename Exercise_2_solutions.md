@@ -366,3 +366,100 @@ changing the 5 interfaces makes no difference here. Swapping them to type aliase
 an interface can be reopened and merged elsewhere, a type alias cannot.
 
 ## Demo 7
+
+drop HasId from lookup-utilities.ts
+converted remaining files to typescript
+
+added EvidenceItem to types.ts
+
+Evidence stays in JSON shape, EvidenceItem is what app state holds. bookmarked is set at runtime by the catalogue and is not in evidence.json
+
+Task 2:
+
+### 1. timeline.js:
+""
+const evtLoc = findLocationById(item.locationIds[el]);
+eventLocationNames.push(evtLoc || item.locationIds[el]);
+""
+
+""
+error TS2345: Argument of type 'string | CaseLocation' is not assignable to parameter of type 'string'.
+  Type 'CaseLocation' is not assignable to type 'string'.
+""
+
+fixed to evtLoc.id + " - " + evtLoc.name, same format the detail view uses
+
+### 2. subtracting two Dates -> evidence-catalogue.js sortResults and timeline.js sort:
+
+""
+items.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+""
+
+""
+error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+""
+
+JS coerces Date via valueOf() so the subtraction works at runtime. TS refuses the implicit coercion. Fixed with .getTime() in both places -> No behaviour change
+
+### 3. navigation.js:
+
+""
+let hash = window.location.hash.replace("#", "");
+const validViews = ["dashboard", "evidence", "people", "timeline", "workspace"];
+if (validViews.indexOf(hash) === -1) hash = "dashboard";
+setCurrentPage(hash);
+""
+
+""
+error TS2345: Argument of type 'string' is not assignable to parameter of type 'ViewName'.
+""
+
+the js already validated the hash. But nothing connected the guard to the assignment, so the check was invisible to anything reading setCurrentPage. Typing currentPage as ViewName forces the narrowing to be the thing that produces the value:
+
+""
+const hash: ViewName = VALID_VIEWS.find((v) => v === raw) ?? "dashboard";
+""
+
+same behaviour, but now the validation is what produces the type
+
+### Questions
+
+#### Q1
+
+the error, timeline.js:
+
+""
+const evtLoc = findLocationById(item.locationIds[el]);
+eventLocationNames.push(evtLoc || item.locationIds[el]);  eventLocationNames: string[]
+""
+
+""
+error TS2345: Argument of type 'string | CaseLocation' is not assignable to parameter of type 'string'.
+  Type 'CaseLocation' is not assignable to type 'string'.
+""
+
+why ! does not work:
+
+! is the non-null assertion. It removes null and undefined from a type, nothing else. It belongs to the nullability family that strictNullChecks turns on, where null and undefined are not silently accepted where another type is expected (10.8).
+
+Declaring non-null doesn't remove the issue since the error is because of the object where a string is required.
+! is the wrong tool, it cannot reach this error at all.
+
+with any it would does compile but wouldn't change the value. The object is still an object and the issue remains. Any would just silence the problem.
+
+--> fixing the type doesn't fix the issue, so the code needs to be adjusted
+
+#### Q2
+
+Once a value becomes any, later property access, calls, and assignments are largely unchecked. Prefer unknown at uncertain boundaries and narrow it deliberately. Use any only as a local, temporary escape hatch with a clear reason (10.7).
+
+generally never use any or !
+
+maybe only use in temporal sturctures, nothing that stays
+
+#### Q3
+
+no big issues, no major bugs or inconsistencies in the views.
+Observed outputs and interactions in the app stayed intact.
+

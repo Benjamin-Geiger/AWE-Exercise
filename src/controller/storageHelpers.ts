@@ -10,9 +10,6 @@ import {
   setNotesStore,
 } from "./state.js";
 
-// notesStore is {} in state.js -> indexing it from ts file needs a shape
-type NoteMap = Record<string, string>;
-
 export function saveBookmarksToStorage(): void {
   localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(bookmarks));
 }
@@ -30,12 +27,12 @@ export function loadBookmarksFromStorage(): void {
 }
 
 export function saveNoteForEvidence(evidenceId: string, text: string): void {
-  (notesStore as NoteMap)[evidenceId] = text;
+  notesStore[evidenceId] = text;
   localStorage.setItem(STORAGE_KEY_NOTES, JSON.stringify(notesStore));
 }
 
 export function loadNoteForEvidence(evidenceId: string): string {
-  return (notesStore as NoteMap)[evidenceId] || "";
+  return notesStore[evidenceId] || "";
 }
 
 export function loadNotesFromStorage(): void {
@@ -46,9 +43,10 @@ export function loadNotesFromStorage(): void {
   }
 
   const parsed: unknown = JSON.parse(raw);
-  setNotesStore(parsed as NoteMap);
+  // cast, not validation - stored contents are still unchecked at runtime
+  setNotesStore(parsed as Record<string, string>);
 }
 
 export function loadNoteAsync(evidenceId: string): Promise<string> {
-  return new Promise((resolve) => resolve((notesStore as NoteMap)[evidenceId] || ""));
+  return new Promise((resolve) => resolve(notesStore[evidenceId] || ""));
 }
