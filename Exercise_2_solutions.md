@@ -327,3 +327,42 @@ or
 type it PersonId[] and make it true at the boundary and normalise on load --> toPersonIds() resolves any entry that is not a known id but matches a person name:
 
 ### Questions
+
+#### Q1
+
+the field: evidence.personIds. 17 of 18 records hold ids ("patch-vector"), E04 holds a display name ("Nova Byte").
+in js nothing ever declared what the strings in that array were. Both forms were just string, so both worked.
+
+checking id OR name means the field can hold either and nothing ever fails the inconsistency is invisible.
+
+TypeScript forced to declare personIds: PersonId[] so every entry is an id. E04 makes that contract false, so the PersonId has to be normalized on load.
+
+#### Q2
+
+TypeScript checks code that participates in the typed program. Values arriving from HTTP, storage, form data, URL parameters or plain JavaScript remain runtime values whose shape can differ from expectations. The type checker has no visibility into what was actually stored (10.16).
+
+A type assertion does not validate JSON. The assertion changes only the compiler's belief. It does not check the stored value (10.16)
+
+
+E12 has status "Reviewed" and relevance "Unknown", both violating the declared unions. E04 had a name in personIds. tsc reported nothing for either -> found by scanning the JSON, not by compiling.
+
+data-loading.ts casts case/people/locations/timeline straight to their domain types. Those casts have no runtime effect. If timeline.json lost a field, or certainty arrived as "maybe", tsc stays silent and the app breaks at runtime.
+
+storageHelpers.ts does the same with localStorage -> parsed as NoteMap.
+
+what is needed in addition: runtime validation at the boundary. Parse and validate before returning a trusted domain type, and for large schemas use a runtime-validation library that produces diagnostics and infers the matching TS types (10.16). 
+Architectural rule: uncertain data is unknown at the boundary and becomes a domain value only after validation.
+
+#### Q3
+
+Interfaces and type aliases can both describe object shapes. Interfaces support declaration merging and an extension syntax. Type aliases can name unions, intersections, tuples, primitives, and computed type expressions. Neither is universally superior, a consistent local convention is more valuable than treating it as doctrine (10.9).
+
+types.ts:
+interfaces for the 5 object shapes (CaseData, Evidence, Person, CaseLocation, TimelineEvent)
+types for everything that is not an object shape: the id aliases (PersonId = string, IsoDateTime = string) and the unions (EvidenceStatus, EvidenceRelevance, Certainty)
+
+changing the 5 interfaces makes no difference here. Swapping them to type aliases would behave identically, nothing relies on merging or extends.
+
+an interface can be reopened and merged elsewhere, a type alias cannot.
+
+## Demo 7
