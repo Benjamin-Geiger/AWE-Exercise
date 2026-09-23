@@ -12,40 +12,58 @@ import { saveHypothesis } from "../view/workspace.js";
 import { switchPeopleTab } from "../view/peopleAndLocations.js";
 import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
 
+// index.html calls these from inline onclick handlers so they must exist on window
+declare global {
+  interface Window {
+    navigateTo: typeof navigateTo;
+    handleSortChange: typeof handleSortChange;
+    switchPeopleTab: typeof switchPeopleTab;
+    saveHypothesis: typeof saveHypothesis;
+    closeEvidenceDetail: typeof closeEvidenceDetail;
+    saveCurrentNote: typeof saveCurrentNote;
+  }
+}
+
 // ---------------------------------------------------------------------
 // EVENT LISTENER SETUP
 // ---------------------------------------------------------------------
 
-function setupEventListeners() {
+function on(id: string, event: string, handler: EventListener): void {
+  document.getElementById(id)?.addEventListener(event, handler);
+}
+
+function setupEventListeners(): void {
   window.addEventListener("hashchange", handleHashChange);
 
   const navButtons = document.querySelectorAll(".nav-btn");
   for (let i = 0; i < navButtons.length; i++) {
-    navButtons[i].addEventListener("click", (event) => {
-      const targetView = event.currentTarget.getAttribute("data-view");
+    navButtons[i]?.addEventListener("click", (event) => {
+      const targetView = (event.currentTarget as HTMLElement).getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
   }
 
-  document.getElementById("evidenceSearch").addEventListener("input", handleSearchInput);
+  on("evidenceSearch", "input", handleSearchInput);
 
-  document.getElementById("filterType").addEventListener("change", renderEvidenceList);
-  document.getElementById("filterPerson").addEventListener("change", renderEvidenceList);
-  document.getElementById("filterLocation").addEventListener("change", renderEvidenceList);
+  on("filterType", "change", renderEvidenceList);
+  on("filterPerson", "change", renderEvidenceList);
+  on("filterLocation", "change", renderEvidenceList);
 
-  document.getElementById("filterStatus").addEventListener("change", renderEvidenceList);
+  on("filterStatus", "change", renderEvidenceList);
 
-  document.getElementById("filterRelevance").addEventListener("change", renderEvidenceList);
+  on("filterRelevance", "change", renderEvidenceList);
 
-  document.getElementById("clearFiltersBtn").addEventListener("click", clearFilters);
+  on("clearFiltersBtn", "click", clearFilters);
 
-  document.getElementById("timelineOrder").addEventListener("change", renderTimeline);
-  document.getElementById("timelinePersonFilter").addEventListener("change", renderTimeline);
-  document.getElementById("timelineLocationFilter").addEventListener("change", renderTimeline);
-  document.getElementById("timelineTypeFilter").addEventListener("change", renderTimeline);
+  on("timelineOrder", "change", renderTimeline);
+  on("timelinePersonFilter", "change", renderTimeline);
+  on("timelineLocationFilter", "change", renderTimeline);
+  on("timelineTypeFilter", "change", renderTimeline);
 
-  document.getElementById("hypConfidence").addEventListener("input", (e) => {
-    document.getElementById("hypConfidenceValue").textContent = e.target.value;
+  on("hypConfidence", "input", (e) => {
+    const value = (e.target as HTMLInputElement).value;
+    const out = document.getElementById("hypConfidenceValue");
+    if (out) out.textContent = value;
   });
 }
 
@@ -60,12 +78,12 @@ window.saveCurrentNote = saveCurrentNote;
 // INIT
 // ---------------------------------------------------------------------
 
-function initApp() {
+function initApp(): void {
   loadBookmarksFromStorage();
   loadNotesFromStorage();
   setupEventListeners();
 
-  loadAllData().then(() => {
+  void loadAllData().then(() => {
     handleHashChange();
     const firstNote = loadNoteAsync("E01");
     console.log("First note preview:", firstNote);

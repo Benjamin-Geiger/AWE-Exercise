@@ -37,6 +37,12 @@ export interface Evidence {
   relevance: EvidenceRelevance;
 }
 
+// Evidence as held in app state: the JSON shape plus the runtime-only flag the
+// catalogue sets. bookmarked is NOT in evidence.json.
+export interface EvidenceItem extends Evidence {
+  bookmarked?: boolean;
+}
+
 export interface Person {
   id: PersonId;
   name: string;

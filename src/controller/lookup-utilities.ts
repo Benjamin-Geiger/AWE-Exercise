@@ -2,10 +2,9 @@
 // GENERIC LOOKUP HELPERS
 // ---------------------------------------------------------------------
 import { allEvidence, allPeople, allLocations } from "./state.js";
+import type { CaseLocation, Evidence, EvidenceItem, Person } from "../types.js";
 
-type HasId = { id: string };
-
-function findEvidenceById(id: string): HasId | null {
+function findEvidenceById(id: string): EvidenceItem | null {
   for (let i = 0; i < allEvidence.length; i++) {
     const item = allEvidence[i];
     if (item && item.id === id) return item;
@@ -13,7 +12,7 @@ function findEvidenceById(id: string): HasId | null {
   return null;
 }
 
-function findPersonById(id: string): HasId | null {
+function findPersonById(id: string): Person | null {
   for (let i = 0; i < allPeople.length; i++) {
     const item = allPeople[i];
     if (item && item.id === id) return item;
@@ -21,7 +20,7 @@ function findPersonById(id: string): HasId | null {
   return null;
 }
 
-function findLocationById(id: string): HasId | null {
+function findLocationById(id: string): CaseLocation | null {
   for (let i = 0; i < allLocations.length; i++) {
     const item = allLocations[i];
     if (item && item.id === id) return item;
@@ -29,10 +28,9 @@ function findLocationById(id: string): HasId | null {
   return null;
 }
 
-function evidenceMentionsPerson(
-  ev: { personIds?: string[] },
-  person: { id: string; name: string },
-): boolean {
+// personIds are normalised to ids on load in data-loading.ts, so the id check
+// is enough. name check as a fallback for unresolved names.
+function evidenceMentionsPerson(ev: Evidence, person: Person): boolean {
   if (!ev.personIds) return false;
   return ev.personIds.indexOf(person.id) !== -1 || ev.personIds.indexOf(person.name) !== -1;
 }

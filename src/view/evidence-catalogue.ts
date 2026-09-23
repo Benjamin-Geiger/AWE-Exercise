@@ -23,60 +23,57 @@ import {
   allLocations,
 } from "../controller/state.js";
 import { populateTimelineDropdowns } from "./timeline.js";
+import type { EvidenceItem } from "../types.js";
 
-export function populateAllDropdowns() {
+export function populateAllDropdowns(): void {
   populateEvidenceDropdowns();
   populateTimelineDropdowns();
   populateHypothesisDropdowns();
 }
 
-function populateEvidenceDropdowns() {
+function populateEvidenceDropdowns(): void {
   const typeSelect = document.getElementById("filterType");
   const personSelect = document.getElementById("filterPerson");
   const locationSelect = document.getElementById("filterLocation");
   if (!typeSelect || !personSelect || !locationSelect) return;
 
-  const types = [];
-  for (let i = 0; i < allEvidence.length; i++) {
-    const t = allEvidence[i].type.toLowerCase();
+  const types: string[] = [];
+  for (const ev of allEvidence) {
+    const t = ev.type.toLowerCase();
     if (types.indexOf(t) === -1) types.push(t);
   }
   typeSelect.innerHTML = '<option value="">All types</option>';
-  for (let ti = 0; ti < types.length; ti++) {
-    typeSelect.innerHTML += '<option value="' + types[ti] + '">' + types[ti] + "</option>";
+  for (const type of types) {
+    typeSelect.innerHTML += '<option value="' + type + '">' + type + "</option>";
   }
 
   personSelect.innerHTML = '<option value="">All people</option>';
-  for (let p = 0; p < allPeople.length; p++) {
-    personSelect.innerHTML +=
-      '<option value="' + allPeople[p].id + '">' + allPeople[p].name + "</option>";
+  for (const person of allPeople) {
+    personSelect.innerHTML += '<option value="' + person.id + '">' + person.name + "</option>";
   }
 
   locationSelect.innerHTML = '<option value="">All locations</option>';
-  for (let l = 0; l < allLocations.length; l++) {
+  for (const loc of allLocations) {
     locationSelect.innerHTML +=
-      '<option value="' +
-      allLocations[l].id +
-      '">' +
-      allLocations[l].id +
-      " - " +
-      allLocations[l].name +
-      "</option>";
+      '<option value="' + loc.id + '">' + loc.id + " - " + loc.name + "</option>";
   }
 }
 
-function getFilteredEvidence() {
-  const searchBox = document.getElementById("evidenceSearch");
+function getFilteredEvidence(): EvidenceItem[] {
+  const searchBox = document.getElementById("evidenceSearch") as HTMLInputElement | null;
   const searchTerm = searchBox ? searchBox.value.toLowerCase().trim() : "";
-  const typeVal = document.getElementById("filterType").value;
-  const personVal = document.getElementById("filterPerson").value;
-  const locationVal = document.getElementById("filterLocation").value;
-  const statusVal = document.getElementById("filterStatus").value;
-  const relevanceVal = document.getElementById("filterRelevance").value;
+  const typeVal = (document.getElementById("filterType") as HTMLSelectElement | null)?.value ?? "";
+  const personVal =
+    (document.getElementById("filterPerson") as HTMLSelectElement | null)?.value ?? "";
+  const locationVal =
+    (document.getElementById("filterLocation") as HTMLSelectElement | null)?.value ?? "";
+  const statusVal =
+    (document.getElementById("filterStatus") as HTMLSelectElement | null)?.value ?? "";
+  const relevanceVal =
+    (document.getElementById("filterRelevance") as HTMLSelectElement | null)?.value ?? "";
 
-  const results = [];
-  for (let i = 0; i < allEvidence.length; i++) {
-    const item = allEvidence[i];
+  const results: EvidenceItem[] = [];
+  for (const item of allEvidence) {
     let matches = true;
 
     if (searchTerm) {
@@ -100,7 +97,7 @@ function getFilteredEvidence() {
   return results;
 }
 
-export function renderEvidenceList() {
+export function renderEvidenceList(): void {
   const container = document.getElementById("evidenceList");
   if (!container) return;
 
@@ -118,8 +115,8 @@ export function renderEvidenceList() {
   if (results.length === 0) {
     html = "<p>No evidence matches the current filters.</p>";
   }
-  for (let i = 0; i < results.length; i++) {
-    html += renderEvidenceCardHTML(results[i]);
+  for (const result of results) {
+    html += renderEvidenceCardHTML(result);
   }
   container.innerHTML = html;
 
@@ -127,7 +124,7 @@ export function renderEvidenceList() {
   container.addEventListener("click", handleEvidenceListClick);
 }
 
-function renderEvidenceCardHTML(ev) {
+function renderEvidenceCardHTML(ev: EvidenceItem): string {
   const isBookmarked = bookmarks.indexOf(ev.id) !== -1;
   let html = '<div class="evidence-card" data-id="' + ev.id + '">';
   html +=
@@ -158,30 +155,32 @@ function renderEvidenceCardHTML(ev) {
   html +=
     '<span class="badge ' + getRelevanceBadgeClass(ev.relevance) + '">' + ev.relevance + "</span>";
   html += "<div>";
-  for (let t = 0; t < ev.tags.length; t++) {
-    html += '<span class="tag-chip">' + ev.tags[t] + "</span>";
+  for (const tag of ev.tags) {
+    html += '<span class="tag-chip">' + tag + "</span>";
   }
   html += "</div>";
   html += "</div>";
   return html;
 }
 
-function handleEvidenceListClick(event) {
-  const target = event.target;
+function handleEvidenceListClick(event: Event): void {
+  const target = event.target as HTMLElement;
 
   if (target.dataset && target.dataset.action === "bookmark") {
     event.stopPropagation();
-    handleBookmarkClick(target.dataset.id);
+    const id = target.dataset.id;
+    if (id) handleBookmarkClick(id);
     return;
   }
 
   const card = target.closest(".evidence-card");
   if (card) {
-    openEvidenceDetail(card.getAttribute("data-id"));
+    const id = card.getAttribute("data-id");
+    if (id) openEvidenceDetail(id);
   }
 }
 
-function handleBookmarkClick(evidenceId) {
+function handleBookmarkClick(evidenceId: string): void {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
@@ -196,42 +195,50 @@ function handleBookmarkClick(evidenceId) {
   if (currentPage === "evidence") renderEvidenceList();
 }
 
-export function applyStoredBookmarkFlags() {
-  for (let i = 0; i < allEvidence.length; i++) {
-    allEvidence[i].bookmarked = bookmarks.indexOf(allEvidence[i].id) !== -1;
+export function applyStoredBookmarkFlags(): void {
+  for (const ev of allEvidence) {
+    ev.bookmarked = bookmarks.indexOf(ev.id) !== -1;
   }
 }
 
-export function sortResults(items) {
-  const sortValue = document.getElementById("sortEvidence").value;
+export function sortResults(items: EvidenceItem[]): EvidenceItem[] {
+  const sortSelect = document.getElementById("sortEvidence") as HTMLSelectElement | null;
+  const sortValue = sortSelect ? sortSelect.value : "";
 
   if (sortValue === "title-asc") {
     items.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortValue === "title-desc") {
     items.sort((a, b) => b.title.localeCompare(a.title));
   } else if (sortValue === "date-asc") {
-    items.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    // .getTime(): Date objects cannot be subtracted directly in TypeScript
+    items.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   } else {
-    items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    items.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }
   return items;
 }
 
-export function handleSortChange() {
+export function handleSortChange(): void {
   renderEvidenceList();
 }
 
-export function clearFilters() {
-  document.getElementById("evidenceSearch").value = "";
-  document.getElementById("filterType").value = "";
-  document.getElementById("filterPerson").value = "";
-  document.getElementById("filterLocation").value = "";
-  document.getElementById("filterStatus").value = "";
-  document.getElementById("filterRelevance").value = "";
+export function clearFilters(): void {
+  const ids = [
+    "evidenceSearch",
+    "filterType",
+    "filterPerson",
+    "filterLocation",
+    "filterStatus",
+    "filterRelevance",
+  ];
+  for (const id of ids) {
+    const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+    if (el) el.value = "";
+  }
   renderEvidenceList();
 }
 
-function simulateAsyncSearch(term) {
+function simulateAsyncSearch(term: string): Promise<string> {
   return new Promise((resolve) => {
     setTimeout(() => resolve(term), 300);
   });
@@ -239,11 +246,11 @@ function simulateAsyncSearch(term) {
 
 let latestSearchRequestId = 0;
 
-export function handleSearchInput(event) {
-  const term = event.target.value;
+export function handleSearchInput(event: Event): void {
+  const term = (event.target as HTMLInputElement).value;
   const requestId = ++latestSearchRequestId;
 
-  simulateAsyncSearch(term).then(() => {
+  void simulateAsyncSearch(term).then(() => {
     // Only apply this response if nothing newer has been typed meanwhile.
     if (requestId !== latestSearchRequestId) return;
     renderEvidenceList();

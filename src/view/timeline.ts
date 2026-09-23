@@ -6,46 +6,51 @@ import { navigateTo } from "../controller/navigation.js";
 import { openEvidenceDetail } from "../controller/evidence-detail.js";
 import { allPeople, allLocations, allTimeline } from "../controller/state.js";
 
-export function populateTimelineDropdowns() {
+export function populateTimelineDropdowns(): void {
   const personSelect = document.getElementById("timelinePersonFilter");
   const locationSelect = document.getElementById("timelineLocationFilter");
   const typeSelect = document.getElementById("timelineTypeFilter");
   if (!personSelect || !locationSelect || !typeSelect) return;
 
   personSelect.innerHTML = '<option value="">All people</option>';
-  for (let p = 0; p < allPeople.length; p++) {
-    personSelect.innerHTML +=
-      '<option value="' + allPeople[p].id + '">' + allPeople[p].name + "</option>";
+  for (const person of allPeople) {
+    personSelect.innerHTML += '<option value="' + person.id + '">' + person.name + "</option>";
   }
 
   locationSelect.innerHTML = '<option value="">All locations</option>';
-  for (let l = 0; l < allLocations.length; l++) {
-    locationSelect.innerHTML +=
-      '<option value="' + allLocations[l].id + '">' + allLocations[l].id + "</option>";
+  for (const loc of allLocations) {
+    locationSelect.innerHTML += '<option value="' + loc.id + '">' + loc.id + "</option>";
   }
 
-  const types = [];
-  for (let i = 0; i < allTimeline.length; i++) {
-    if (types.indexOf(allTimeline[i].type) === -1) types.push(allTimeline[i].type);
+  const types: string[] = [];
+  for (const evt of allTimeline) {
+    if (types.indexOf(evt.type) === -1) types.push(evt.type);
   }
   typeSelect.innerHTML = '<option value="">All event types</option>';
-  for (let t = 0; t < types.length; t++) {
-    typeSelect.innerHTML += '<option value="' + types[t] + '">' + types[t] + "</option>";
+  for (const type of types) {
+    typeSelect.innerHTML += '<option value="' + type + '">' + type + "</option>";
   }
 }
 
-export function renderTimeline() {
+export function renderTimeline(): void {
   const container = document.getElementById("timelineContainer");
   if (!container) return;
 
-  const order = document.getElementById("timelineOrder").value;
-  const personFilter = document.getElementById("timelinePersonFilter").value;
-  const locationFilter = document.getElementById("timelineLocationFilter").value;
-  const typeFilter = document.getElementById("timelineTypeFilter").value;
+  const orderSelect = document.getElementById("timelineOrder") as HTMLSelectElement | null;
+  const personSelect = document.getElementById("timelinePersonFilter") as HTMLSelectElement | null;
+  const locationSelect = document.getElementById(
+    "timelineLocationFilter",
+  ) as HTMLSelectElement | null;
+  const typeSelect = document.getElementById("timelineTypeFilter") as HTMLSelectElement | null;
+  if (!orderSelect || !personSelect || !locationSelect || !typeSelect) return;
+
+  const order = orderSelect.value;
+  const personFilter = personSelect.value;
+  const locationFilter = locationSelect.value;
+  const typeFilter = typeSelect.value;
 
   let events = [];
-  for (let i = 0; i < allTimeline.length; i++) {
-    const evt = allTimeline[i];
+  for (const evt of allTimeline) {
     if (personFilter && evt.personIds.indexOf(personFilter) === -1) continue;
     if (locationFilter && evt.locationIds.indexOf(locationFilter) === -1) continue;
     if (typeFilter && evt.type !== typeFilter) continue;
@@ -53,13 +58,12 @@ export function renderTimeline() {
   }
 
   events = events.slice().sort((a, b) => {
-    const diff = new Date(a.time) - new Date(b.time);
+    const diff = new Date(a.time).getTime() - new Date(b.time).getTime();
     return order === "desc" ? -diff : diff;
   });
 
   let html = "";
-  for (let e = 0; e < events.length; e++) {
-    const item = events[e];
+  for (const item of events) {
     html += '<div class="timeline-event certainty-' + item.certainty + '">';
     html +=
       '<div class="timeline-time">' +
@@ -72,21 +76,21 @@ export function renderTimeline() {
     html += "<h3>" + item.title + "</h3>";
     html += "<p>" + item.description + "</p>";
 
-    const eventLocationNames = [];
-    for (let el = 0; el < item.locationIds.length; el++) {
-      const evtLoc = findLocationById(item.locationIds[el]);
-      eventLocationNames.push(evtLoc || item.locationIds[el]);
+    const eventLocationNames: string[] = [];
+    for (const locationId of item.locationIds) {
+      const evtLoc = findLocationById(locationId);
+      eventLocationNames.push(evtLoc ? evtLoc.id + " - " + evtLoc.name : locationId);
     }
     if (eventLocationNames.length > 0) {
       html += '<p class="evidence-meta">Location: ' + eventLocationNames.join(", ") + "</p>";
     }
 
-    for (let ev2 = 0; ev2 < item.evidenceIds.length; ev2++) {
+    for (const evidenceId of item.evidenceIds) {
       html +=
         '<button type="button" class="evidence-link-btn" data-evidence-id="' +
-        item.evidenceIds[ev2] +
+        evidenceId +
         '">View ' +
-        item.evidenceIds[ev2] +
+        evidenceId +
         "</button>";
     }
     html += "</div>";
@@ -98,21 +102,21 @@ export function renderTimeline() {
 
   const linkButtons = container.querySelectorAll(".evidence-link-btn");
   for (let b = 0; b < linkButtons.length; b++) {
-    linkButtons[b].addEventListener("click", (e) => {
-      openEvidenceModal(e.target.getAttribute("data-evidence-id"));
+    linkButtons[b]?.addEventListener("click", (e) => {
+      const id = (e.target as HTMLElement).getAttribute("data-evidence-id");
+      if (id) openEvidenceModal(id);
     });
   }
 }
 
-function certaintyBadgeClass(certainty) {
+function certaintyBadgeClass(certainty: string): string {
   if (certainty === "confirmed") return "reviewed";
   if (certainty === "contradictory") return "critical";
   if (certainty === "reported") return "flagged";
   return "unreviewed";
 }
 
-// --- Quick-view modal (used from the timeline) -------------------------
-function openEvidenceModal(evidenceId) {
+function openEvidenceModal(evidenceId: string): void {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
@@ -147,15 +151,13 @@ function openEvidenceModal(evidenceId) {
     "</div></div>";
 }
 
-function handleModalClick(e) {
-  const modal = e.currentTarget;
-  if (
-    e.target.classList.contains("modal-close-btn") ||
-    e.target.classList.contains("modal-backdrop")
-  ) {
+function handleModalClick(e: Event): void {
+  const modal = e.currentTarget as HTMLElement;
+  const target = e.target as HTMLElement;
+  if (target.classList.contains("modal-close-btn") || target.classList.contains("modal-backdrop")) {
     modal.innerHTML = "";
   }
-  const openId = e.target.getAttribute && e.target.getAttribute("data-open-full");
+  const openId = target.getAttribute("data-open-full");
   if (openId) {
     modal.innerHTML = "";
     navigateTo("evidence");

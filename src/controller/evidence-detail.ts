@@ -11,37 +11,48 @@ import {
 import { loadNoteForEvidence, saveNoteForEvidence } from "./storageHelpers.js";
 import { renderEvidenceList } from "../view/evidence-catalogue.js";
 import { viewRendered } from "./state.js";
+import type { EvidenceItem, EvidenceRelevance, EvidenceStatus } from "../types.js";
 
-export function openEvidenceDetail(evidenceId) {
+const STATUSES: EvidenceStatus[] = ["unreviewed", "reviewed", "flagged"];
+const RELEVANCES: EvidenceRelevance[] = ["unknown", "relevant", "irrelevant"];
+
+export function openEvidenceDetail(evidenceId: string): void {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
   section.classList.remove("hidden");
 
   renderEvidenceDetail(ev);
   section.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-export function closeEvidenceDetail() {
+export function closeEvidenceDetail(): void {
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
   section.classList.add("hidden");
   section.innerHTML = "";
 }
 
-function renderEvidenceDetail(ev) {
+function renderEvidenceDetail(ev: EvidenceItem): void {
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
 
-  const personNames = [];
+  const personNames: string[] = [];
   for (let p = 0; p < ev.personIds.length; p++) {
-    const person = findPersonById(ev.personIds[p]);
-    personNames.push(person ? person.name : ev.personIds[p]);
+    const personId = ev.personIds[p];
+    if (!personId) continue;
+    const person = findPersonById(personId);
+    personNames.push(person ? person.name : personId);
   }
 
-  const locationNames = [];
+  const locationNames: string[] = [];
   for (let l = 0; l < ev.locationIds.length; l++) {
-    const loc = findLocationById(ev.locationIds[l]);
-    locationNames.push(loc ? loc.id + " - " + loc.name : ev.locationIds[l]);
+    const locationId = ev.locationIds[l];
+    if (!locationId) continue;
+    const loc = findLocationById(locationId);
+    locationNames.push(loc ? loc.id + " - " + loc.name : locationId);
   }
 
   let tagsHtml = "";
@@ -112,28 +123,35 @@ function renderEvidenceDetail(ev) {
 
   section.innerHTML = html;
 
-  document.getElementById("detailStatusSelect").addEventListener("change", (e) => {
-    ev.status = e.target.value; // direct mutation of the loaded evidence object
+  const statusSelect = document.getElementById("detailStatusSelect");
+  statusSelect?.addEventListener("change", (e) => {
+    const value = (e.target as HTMLSelectElement).value;
+    // the select only ever holds the three EvidenceStatus values
+    ev.status = STATUSES.find((s) => s === value) ?? ev.status; // direct mutation of the loaded evidence object
     renderEvidenceDetail(ev);
     if (viewRendered.evidence) renderEvidenceList();
   });
-  document.getElementById("detailRelevanceSelect").addEventListener("change", (e) => {
-    ev.relevance = e.target.value;
+
+  const relevanceSelect = document.getElementById("detailRelevanceSelect");
+  relevanceSelect?.addEventListener("change", (e) => {
+    const value = (e.target as HTMLSelectElement).value;
+    ev.relevance = RELEVANCES.find((r) => r === value) ?? ev.relevance;
     renderEvidenceDetail(ev);
     if (viewRendered.evidence) renderEvidenceList();
   });
 }
 
-function statusOptionHTML(current, value, label) {
+function statusOptionHTML(current: string, value: string, label: string): string {
   const currentLower = (current || "").toLowerCase();
   const selected = currentLower === value ? " selected" : "";
   return '<option value="' + value + '"' + selected + ">" + label + "</option>";
 }
 
-export function saveCurrentNote() {
-  const textarea = document.getElementById("evidenceNoteInput");
+export function saveCurrentNote(): void {
+  const textarea = document.getElementById("evidenceNoteInput") as HTMLTextAreaElement | null;
   if (!textarea) return;
   const evidenceId = textarea.getAttribute("data-evidence-id"); // note id is read back off the DOM
+  if (!evidenceId) return;
   const text = textarea.value;
   saveNoteForEvidence(evidenceId, text);
   const preview = document.getElementById("notePreview");

@@ -7,31 +7,34 @@ import { renderPeople, renderLocations } from "../view/peopleAndLocations.js";
 import { renderTimeline } from "../view/timeline.js";
 import { renderWorkspace } from "../view/workspace.js";
 import { viewRendered, setCurrentPage, setViewRendered } from "./state.js";
+import type { ViewName } from "./state.js";
 
-export function navigateTo(viewName) {
+const VALID_VIEWS: ViewName[] = ["dashboard", "evidence", "people", "timeline", "workspace"];
+
+export function navigateTo(viewName: ViewName): void {
   window.location.hash = viewName;
   // handleHashChange() will pick this up via the hashchange listener
 }
 
-export function handleHashChange() {
-  let hash = window.location.hash.replace("#", "");
-  const validViews = ["dashboard", "evidence", "people", "timeline", "workspace"];
-  if (validViews.indexOf(hash) === -1) {
-    hash = "dashboard";
-  }
+export function handleHashChange(): void {
+  const raw = window.location.hash.replace("#", "");
+  // narrows string -> ViewName, same fallback as the old indexOf check
+  const hash: ViewName = VALID_VIEWS.find((v) => v === raw) ?? "dashboard";
   setCurrentPage(hash);
 
   const sections = document.querySelectorAll(".view");
   for (let i = 0; i < sections.length; i++) {
-    sections[i].classList.remove("active");
+    sections[i]?.classList.remove("active");
   }
-  document.getElementById("view-" + hash).classList.add("active");
+  document.getElementById("view-" + hash)?.classList.add("active");
 
   const navButtons = document.querySelectorAll(".nav-btn");
   for (let n = 0; n < navButtons.length; n++) {
-    navButtons[n].classList.remove("active");
-    if (navButtons[n].getAttribute("data-view") === hash) {
-      navButtons[n].classList.add("active");
+    const btn = navButtons[n];
+    if (!btn) continue;
+    btn.classList.remove("active");
+    if (btn.getAttribute("data-view") === hash) {
+      btn.classList.add("active");
     }
   }
 
