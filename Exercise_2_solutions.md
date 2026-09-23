@@ -294,3 +294,36 @@ e.g.: allEvidence comes from untyped state.js and infers as any[], so allEvidenc
 if a value returns any every future caller looses checking too. So its faster now and much more work later.
 
 ## Demo 6
+
+Task 1:
+
+added src/types.ts, shapes derived from the data files
+
+certainty -> union ("confirmed" | "reported" | "contradictory"), values are consistent in the raw data
+status / relevance -> union of the 3 the UI offers
+IsoDateTime vs IsoDate -> two aliases, because case.opened is "2026-10-16" (date only) while every other date is "2026-10-16T06:49:00Z"
+bookmarked is not on Evidence. evidence-catalogue sets it at runtime
+
+Task 2:
+
+data-loading.js -> data-loading.ts
+
+fetch().json() is typed any. Pinned to unknown in one fetchJson() helper, so nothing downstream inherits any.
+
+case / people / locations / timeline -> cast to the domain type at the call site.
+evidence -> goes through toEvidenceList() which normalises before it becomes a domain value.
+
+Task 3: evidence.personIds
+
+personIds is an array of strings. 17 of 18 records hold ids but E04 holds display name ("Nova Byte"). JS never had to decide which one it was, because nothing ever declared what the array contained.
+
+evidenceMentionsPerson checks id or name, the data has two different meanings in one field.
+
+TypeScript forced declaring personIds: PersonId[] means that every entry is an id. That doesn't work with entry E04. 
+
+
+(could type it as string[] -> honest about the raw file, but the type says nothing and the dual lookup stays forever)
+or
+type it PersonId[] and make it true at the boundary and normalise on load --> toPersonIds() resolves any entry that is not a known id but matches a person name:
+
+### Questions

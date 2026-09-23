@@ -16,7 +16,7 @@ export interface CaseData {
   title: string;
   subtitle: string;
   status: string;
-  opened: IsoDate; 
+  opened: IsoDate;
   summary: string;
   location: string;
   leadInvestigator: string;
