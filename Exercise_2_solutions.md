@@ -483,3 +483,10 @@ Check AI/Bot code.
 ### Q3
 
 Dependency caching improves performance but is not required for correctness. Missing cache just requires new dependency download but does not impact correcntes.
+
+## Demo 9
+
+[main] deployment only for main branch
+read permission, write only within deploy job
+concurrency - cancel in progress -> no overlapping of multible pushes.
+2 jobs -> build builds -> deploy deploys the build
