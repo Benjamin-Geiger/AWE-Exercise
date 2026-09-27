@@ -491,3 +491,26 @@ read permission, write only within deploy job
 concurrency - cancel in progress -> no overlapping of multible pushes.
 2 jobs -> build builds -> deploy deploys the build
 changed GitRepo setting Pages-Source to GitHubActions.
+
+### Q1
+
+Because local environments could differ from CI/CD. Just because something builds locally does not mean it will in CI/CD.
+
+re run lint and build ensures correct environment and correct code.
+
+### Q2
+
+The mechanism is GitHubs artifact based pages deployment. 2 steps build and deploy.
+
+actions/configure-pages@v5 reads pages config from repo (had to change pages source to git-hub actions)
+
+actions/upload-pages-artifact@v4 takes /dist and uploads it to workflow artifact storage.
+
+Deplay waits for build. Deploy has write permision. actions/deploy-pages@v4 -> publishes, github pages unpacks and serves.
+
+### Q3
+
+The build remains the same regardless of host. But the host specific config would have to change.
+"configure-pages, deploy-pages" etc
+All pages specific has to be replaced with the other hosts steps.
+Differnet Authentication that git.
