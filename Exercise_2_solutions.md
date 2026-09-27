@@ -465,3 +465,21 @@ Observed outputs and interactions in the app stayed intact.
 
 ## Demo 8
 
+### Q1
+
+A workflow is the entire automation which is triggered by certain events. E.g.: push/pull_request can be triggers for the workflow.
+
+A job is a unit of work within the workflow which is being executed by a runner.
+
+A step is one action/command within a job.
+
+### Q2
+
+Because running it locally and in CI server different purposes. Locally its to prevent/find bad code. In CI it is to prevent faulty code to enter the repository. Developers can forgett running lint locally so if CI doesn't run it it's not catched.
+
+Local environments can be different. CI forces compatability.
+Check AI/Bot code.
+
+### Q3
+
+Dependency caching improves performance but is not required for correctness. Missing cache just requires new dependency download but does not impact correcntes.
