@@ -1,4 +1,4 @@
-export type EvidenceId = string;
+export type EvidenceId = number;
 export type PersonId = string;
 export type LocationId = string;
 export type TimelineEventId = string;
