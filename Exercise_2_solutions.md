@@ -514,3 +514,42 @@ The build remains the same regardless of host. But the host specific config woul
 "configure-pages, deploy-pages" etc
 All pages specific has to be replaced with the other hosts steps.
 Differnet Authentication that git.
+
+## Demo 10
+
+No secrets gits artifact based mechanism uses OIDC (OpenID Connect) a short lived per run token.
+""
+The automatically provided GITHUB_TOKEN receives permissions configured
+at workflow or job level. Grant only what a job needs. Verification
+normally requires contents: read. Pages deployment requires pages:
+write and id-token: write in the deploy job.
+""
+Different permissions for workflow and job. Workflow only has read, deploy needs write to publish -> dangerous permision only where necesarry
+
+### Q1
+
+Previous version stays alive.
+
+Deploy needs the build to run, when build fails deploy never runs and cant replace the currently deployed version. Also build failure happes befor the new artifact is built so its not even published and cant be deployed.
+
+-> thats good, that way the user remains with an old (working) version instead of a new broken one.
+
+### Q2
+
+No secrets gits artifact based mechanism uses OIDC (OpenID Connect) a short lived per run token.
+""
+The automatically provided GITHUB_TOKEN receives permissions configured
+at workflow or job level. Grant only what a job needs. Verification
+normally requires contents: read. Pages deployment requires pages:
+write and id-token: write in the deploy job.
+""
+Different permissions for workflow and job. Workflow only has read, deploy needs write to publish -> dangerous permision only where necesarry
+
+Over granting permisions during e.g. build process could result in a compromised package messing with the deployment. -> write only with deploy to not mess with the code
+
+### Q3
+
+verify should run on every branch and every pull request, want to catch errors/feedback early.
+
+Deploy should only run when we want to release code. Not on every branch only on main. 
+Workflow dispatch on deploy is used for recovery, to republish main (e.g after I switched by Github pages source to Github actions)
