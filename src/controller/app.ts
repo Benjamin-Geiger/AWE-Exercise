@@ -15,11 +15,7 @@ import { closeEvidenceDetail, saveCurrentNote } from "./evidence-detail.js";
 // index.html calls these from inline onclick handlers so they must exist on window
 declare global {
   interface Window {
-    navigateTo: typeof navigateTo;
-    handleSortChange: typeof handleSortChange;
-    switchPeopleTab: typeof switchPeopleTab;
-    saveHypothesis: typeof saveHypothesis;
-    closeEvidenceDetail: typeof closeEvidenceDetail;
+    navigateTo: typeof navigateTo;handleSortChange: typeof handleSortChange;switchPeopleTab: typeof switchPeopleTab;saveHypothesis: typeof saveHypothesis;closeEvidenceDetail: typeof closeEvidenceDetail;
     saveCurrentNote: typeof saveCurrentNote;
   }
 }
