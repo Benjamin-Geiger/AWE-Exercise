@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   root: ".",
   publicDir: "public",
+  base: "/AWE-Exercise/",
 
   // vite default values, not strictly necessary
   server: {
