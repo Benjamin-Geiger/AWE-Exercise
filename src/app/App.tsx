@@ -13,13 +13,13 @@ function renderPage(view: ViewName, data: CaseDataset): ReactElement {
     case "dashboard":
       return <DashboardPage data={data} />;
     case "evidence":
-      return <PlaceholderPage title="Evidence Catalogue" view={view} />;
+      return <PlaceholderPage title="Evidence Catalogue" />;
     case "people":
-      return <PlaceholderPage title="People & Locations" view={view} />;
+      return <PlaceholderPage title="People & Locations" />;
     case "timeline":
-      return <PlaceholderPage title="Investigation Timeline" view={view} />;
+      return <PlaceholderPage title="Investigation Timeline" />;
     case "workspace":
-      return <PlaceholderPage title="Investigator Workspace" view={view} />;
+      return <PlaceholderPage title="Investigator Workspace" />;
   }
 }
 
