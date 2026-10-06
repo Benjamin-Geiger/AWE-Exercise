@@ -186,3 +186,15 @@ App.tsx -> new component with header and text, reused into-card style.
 
 index.html -> added div containing the new component
             -> added main.tsx script
+### T3
+Complete swapover would break the app for the duration of the migration. Every view needs to be in react.
+Comparing old/new version is harder.
+-> simple solution
+
+Separate React version:
+own html page, separate root, old app stays as is
+-> easier to compare the versions
+-> no DOM interference, bc separate pages
+but
+-> more work
+
