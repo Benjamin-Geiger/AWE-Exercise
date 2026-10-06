@@ -15,7 +15,7 @@ export default [
 
   // Declaring the environment is what stops the linter from reporting the browser API as undefined variables
   {
-    files: ["src/**/*.{js,ts}"],
+    files: ["src/**/*.{js,ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module", // modules: import/export
