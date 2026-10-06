@@ -170,3 +170,19 @@ JSX has no HTML, its compiled to JS which builds js objects. The objects describ
 Render doesn't just run once. It might restart work and mutate the variable without an actual rerender.
 Differences between dev/prod. Dev checks could call the function twice.
 --> side effects belong in event handlers not jsx components.
+
+## Demo 6
+
+### T1
+package.json -> added dependencies, react&reactdom
+             -> devDep - vite react plugin
+             -> devDep - type definitions for jsx
+vite.config  -> turned on plugin
+tsconfig     -> added jsx typecheck
+### T2
+main.tsx -> entry point, finds root, creates container and renders App function.
+
+App.tsx -> new component with header and text, reused into-card style.
+
+index.html -> added div containing the new component
+            -> added main.tsx script

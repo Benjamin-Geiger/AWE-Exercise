@@ -13,7 +13,7 @@
     // Ensures that each file can be transformed independently
     // by tools that do not perform whole-program analysis.
     "isolatedModules": true,
-    // type-check JSX in .tsx files using the automatic runtime (no `import React` needed)
+    // type-check JSX in .tsx files
     "jsx": "react-jsx",
     // required to allow js files alongside ts files
     "allowJs": true,
