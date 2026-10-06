@@ -198,3 +198,57 @@ own html page, separate root, old app stays as is
 but
 -> more work
 
+## Demo 7
+
+src/
+  app/
+    App.tsx                   
+    AppShell.tsx              
+    router.ts                 
+  features/
+    dashboard/
+      DashboardPage.tsx       
+      components/
+        CaseSummaryCard.tsx  
+        StatCard.tsx                                                        
+        ReviewProgress.tsx                                                   
+        RecentEvidenceList.tsx                                                 
+        RecentTimelineList.tsx                                                 
+    evidence/
+      EvidencePage.tsx        
+      components/
+        EvidenceToolbar.tsx   
+        EvidenceList.tsx
+        EvidenceCard.tsx
+        BookmarkButton.tsx
+        TagChip.tsx
+        EvidenceDetail.tsx
+        NoteEditor.tsx
+    people/
+      PeopleLocationsPage.tsx 
+      components/
+        PersonCard.tsx        
+        LocationCard.tsx
+    timeline/
+      TimelinePage.tsx        
+      components/
+        TimelineToolbar.tsx   
+        TimelineEventCard.tsx
+        EvidenceQuickView.tsx
+    workspace/
+      WorkspacePage.tsx      
+      components/
+        BookmarksList.tsx     
+        NotesList.tsx
+        HypothesisForm.tsx
+  shared/
+    components/               
+      Panel.tsx
+      Badge.tsx
+      Button.tsx
+      MiniListItem.tsx
+      FilterSelect.tsx
+      EmptyState.tsx
+      Spinner.tsx
+    format/
+      dates.ts                
