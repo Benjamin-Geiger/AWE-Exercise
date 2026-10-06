@@ -7,7 +7,7 @@ export default defineConfig({
   publicDir: "public",
   base: "/AWE-Exercise/",
 
-  // two entry pages while migrating: vanilla on index.html, React on react.html
+  // two entry pages for old&react
   build: {
     rolldownOptions: {
       input: {

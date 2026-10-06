@@ -9,7 +9,7 @@ export const VIEWS = [
 
 export type ViewName = (typeof VIEWS)[number]["id"];
 
-// unknown or empty hash falls back to the dashboard, like the vanilla handleHashChange()
+// unknown or empty hash -> to dashboard
 export function parseView(hash: string): ViewName {
   const raw = hash.replace("#", "");
   return VIEWS.find((v) => v.id === raw)?.id ?? "dashboard";

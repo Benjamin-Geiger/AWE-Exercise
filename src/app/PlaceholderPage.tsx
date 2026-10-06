@@ -6,13 +6,13 @@ interface PlaceholderPageProps {
   view: ViewName;
 }
 
-// stand-in for views that are migrated in Exercises 4 and 5
+// placeholder for upcoming pages
 export function PlaceholderPage({ title, view }: PlaceholderPageProps): ReactElement {
   return (
     <section>
       <h2>{title}</h2>
       <p>
-        Not migrated to React yet. Use the <a href={`./#${view}`}>vanilla version</a> for now.
+        Nothing here yet :/
       </p>
     </section>
   );

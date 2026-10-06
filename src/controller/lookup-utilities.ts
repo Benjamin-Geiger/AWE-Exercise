@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------
 import { allEvidence, allPeople, allLocations } from "./state.js";
 import type { CaseLocation, Evidence, EvidenceItem, Person } from "../types.js";
+import { formatDate } from "../shared/format/dates.js";
 
 function findEvidenceById(id: string): EvidenceItem | null {
   for (let i = 0; i < allEvidence.length; i++) {
@@ -33,17 +34,6 @@ function findLocationById(id: string): CaseLocation | null {
 function evidenceMentionsPerson(ev: Evidence, person: Person): boolean {
   if (!ev.personIds) return false;
   return ev.personIds.indexOf(person.id) !== -1 || ev.personIds.indexOf(person.name) !== -1;
-}
-
-function formatDate(ts: string | null | undefined): string {
-  if (!ts) return "Unknown date";
-  const d = new Date(ts);
-  if (isNaN(d.getTime())) return ts;
-  return (
-    d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) +
-    " " +
-    d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })
-  );
 }
 
 function getStatusBadgeClass(status: string | null | undefined): string {

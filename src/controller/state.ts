@@ -31,9 +31,11 @@ export const viewRendered: Record<ViewName, boolean> = {
 
 export let notesStore: Record<string, string> = {};
 
-export const STORAGE_KEY_BOOKMARKS = "remotion_bookmarks";
-export const STORAGE_KEY_NOTES = "remotion_notes";
-export const STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
+export {
+  STORAGE_KEY_BOOKMARKS,
+  STORAGE_KEY_NOTES,
+  STORAGE_KEY_HYPOTHESIS,
+} from "../shared/storageKeys.js";
 
 export function setAllEvidence(value: EvidenceItem[]): void {
   allEvidence = value;
