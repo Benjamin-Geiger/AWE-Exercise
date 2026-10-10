@@ -93,3 +93,10 @@ false, null, undefinded -> renders to nothing
 empty <div> still takes up a grid cell and a gap, a "nothing" component would leave a hole
 
 returned null nowhere -> optional empty components avoided with &&
+
+# Demo 3
+
+"Domain IDs are preferable whenever available"
+
+person, location and event in the data already has a id that belongs to the item itself, not to its array position.
+When lists are reordered/filtered react can still match each card to the same item.

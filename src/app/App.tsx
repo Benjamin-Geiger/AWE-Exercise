@@ -7,6 +7,8 @@ import type { CaseDataset } from "./useCaseData.js";
 import { useHashRoute } from "./useHashRoute.js";
 import type { ViewName } from "./routes.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
+import { PeopleLocationsPage } from "../features/people-locations/PeopleLocationsPage.js";
+import { TimeLinePage } from "../features/timeline/TimeLinePage.js";
 
 function renderPage(view: ViewName, data: CaseDataset): ReactElement {
   switch (view) {
@@ -15,9 +17,9 @@ function renderPage(view: ViewName, data: CaseDataset): ReactElement {
     case "evidence":
       return <PlaceholderPage title="Evidence Catalogue" />;
     case "people":
-      return <PlaceholderPage title="People & Locations" />;
+      return <PeopleLocationsPage data={data} />;
     case "timeline":
-      return <PlaceholderPage title="Investigation Timeline" />;
+      return <TimeLinePage data={data} />;
     case "workspace":
       return <PlaceholderPage title="Investigator Workspace" />;
   }
