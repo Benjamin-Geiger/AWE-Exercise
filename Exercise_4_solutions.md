@@ -144,4 +144,33 @@ When the data is completley static, is never changed, reordered or filtered.
 e.g Persons responsibilities -> no ids, never sorted or edited after render, no state
 -> two responsibilites could have the same text -> would lead to duplicate key
 
+# Demo 5
+
+## T1
+
+Presentational component -> "Receives data and callbacks through props and focuses on rendering a reusable view."
+
+Feature component -> "Knows domain use cases, chooses data, owns state, coordinates routing, or translates application actions into presentational props."
+
+Feature components:
+
+App.tsx -> owns state(useHashRoute, useCaseData), coordinates routing via renderPage, decides load, error, ready
+
+Dashboardpage -> recieves data and translates it to props
+
+PeopleLocationsPage -> people and locations from data is passed to the cards
+
+TimeLinePage -> decides data order
+
+AppHeader -> only renders currentView but calls navigateTo
+
+Presentational components:
+
+Badge, Panel, MiniListItem, StatCard, ReviewProgess, CaseSummarCard, RecentEvidenceList, RecentTimelineList, PersonCar, LocationCard, TimeLineEventCard
+
+All these are only concerned with display/layout logic.
+
+## T2
+
+AppHeader currently contains the header but also handles navigation.
 
