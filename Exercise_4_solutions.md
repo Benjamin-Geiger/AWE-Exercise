@@ -57,3 +57,39 @@ Each update goes through render, reconciliation, then commit. React compares the
 Nodes that would be updated no longer exist or wouldn't match.
 
 Exceptions: focus, media playback, measurements, and third-party widgets
+
+# Demo 2
+
+if (events.length === 0) {
+    return <p>No timeline events match the current filters.</p>;
+  } 
+  return (...)
+
+returns events if(no events) -> returns message
+
+Old version built the html string and threw it away if no events.
+
+TimeLineEventCard.tsx:
+
+events certainty decides badge colour -> state dependent style
+
+## Q1
+TimeLineEventCard.tsx: 26
+
+{locationNames.length > 0 && (
+  <p className="evidence-meta">Location: {locationNames.join(", ")}</p>
+)}
+
+Location line is optional. Only show if locations otherwise nothing. && logical and optional content
+
+locationNames.length > 0 && -> if lenght 0 -> react renders 0 as text -> would appear in the card
+
+false, null, undefinded -> renders to nothing
+
+## Q2
+
+"A component may return null when it should render nothing. Returning an empty div adds an unnecessary DOM node and may affect layout or semantics."
+
+empty <div> still takes up a grid cell and a gap, a "nothing" component would leave a hole
+
+returned null nowhere -> optional empty components avoided with &&

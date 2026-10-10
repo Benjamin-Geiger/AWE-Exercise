@@ -3,7 +3,6 @@ import { Badge, type BadgeTone } from "../../../shared/components/Badge.js";
 import { formatDate } from "../../../shared/format/dates.js";
 import type { Certainty, TimelineEvent } from "../../../types.js";
 
-// replaces the vanilla certaintyBadgeClass() if-chain
 const CERTAINTY_TONE: Record<Certainty, BadgeTone> = {
   confirmed: "positive",
   reported: "warning",
