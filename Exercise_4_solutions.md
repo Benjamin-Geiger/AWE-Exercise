@@ -100,3 +100,11 @@ returned null nowhere -> optional empty components avoided with &&
 
 person, location and event in the data already has a id that belongs to the item itself, not to its array position.
 When lists are reordered/filtered react can still match each card to the same item.
+
+## Q1
+
+React uses the key during reconciliation to find out which item in a new list is the same as in the previous render. It decides which items are keept, moved, created or removed.
+
+Every update goes through render, then reconciliation, then commit.
+During reconciliation the previous and next element trees are compared by their type, position and key.
+In lists this decision has to be made for every child. Without a key react can only match by position and wouldnt know which item is which when entries are inserted, removed or reordered.
