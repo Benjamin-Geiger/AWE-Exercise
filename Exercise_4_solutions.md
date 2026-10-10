@@ -124,4 +124,24 @@ React thinks key 0 existed before and still exists and that its the same element
 -> change index to "event.id"
 -> react now matches by id
 
+## Q1
+
+React can no longer tell which old element corresponds to which new item.
+
+Missing key behaves just like index as key, react has to match by position
+Duplicate Key -> two elements who claim the same id -> React could update/keep/remove a wrong one
+Index-based -> id bound to position -> state could ends up on wrong item (checkbox example)
+
+## Q2
+
+no warning -> react only wars about missing/duplicate key -> index is still a key
+
+visual change -> only if the item holds a state that isnt derived from props.
+
+## Q3
+
+When the data is completley static, is never changed, reordered or filtered.
+e.g Persons responsibilities -> no ids, never sorted or edited after render, no state
+-> two responsibilites could have the same text -> would lead to duplicate key
+
 
