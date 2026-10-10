@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import { MiniListItem } from "../../../shared/components/MiniListItem.js";
+import { Panel } from "../../../shared/components/Panel.js";
 import { formatDate } from "../../../shared/format/dates.js";
 import type { TimelineEvent } from "../../../types.js";
 
@@ -9,8 +10,7 @@ interface RecentTimelineListProps {
 
 export function RecentTimelineList({ events }: RecentTimelineListProps): ReactElement {
   return (
-    <div className="dashboard-panel">
-      <h3>Recent timeline events</h3>
+    <Panel title="Recent timeline events">
       {events.length === 0 && <p>No timeline events loaded yet.</p>}
       {events.map((evt) => (
         <MiniListItem key={evt.id}>
@@ -19,6 +19,6 @@ export function RecentTimelineList({ events }: RecentTimelineListProps): ReactEl
           {evt.title}
         </MiniListItem>
       ))}
-    </div>
+    </Panel>
   );
 }
