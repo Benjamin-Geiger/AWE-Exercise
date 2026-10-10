@@ -174,3 +174,17 @@ All these are only concerned with display/layout logic.
 
 AppHeader currently contains the header but also handles navigation.
 
+## Q1
+
+AppHeader -> now only presentational and only arranges header layout
+
+MainNav -> Is responsible for moving between views
+
+No changes in each component would affect the other, they only share currentView
+
+## Q2
+
+§15.6 "an isolated responsibility that can change independently"
+
+Navigation changes with every routing decision, the header stays the same
+
