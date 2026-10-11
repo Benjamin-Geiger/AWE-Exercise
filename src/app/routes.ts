@@ -1,7 +1,7 @@
 export const VIEWS = [
   { path: "/", label: "Dashboard" },
   { path: "/evidence", label: "Evidence" },
-  { path: "/people", label: "People & Locations" },
+  { path: "/team", label: "People & Locations" },
   { path: "/timeline", label: "Timeline" },
   { path: "/workspace", label: "Workspace" },
 ] as const;

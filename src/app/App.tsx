@@ -19,7 +19,8 @@ function AppRoutes({ data }: AppRoutesProps): ReactElement {
     <Routes>
       <Route index element={<DashboardPage data={data} />} />
       <Route path="evidence" element={<PlaceholderPage title="Evidence Catalogue" />} />
-      <Route path="people" element={<PeopleLocationsPage data={data} />} />
+      {/* team/* -> page defines its own tab routes */}
+      <Route path="team/*" element={<PeopleLocationsPage data={data} />} />
       <Route path="timeline" element={<TimeLinePage data={data} />} />
       <Route path="workspace" element={<PlaceholderPage title="Investigator Workspace" />} />
       {/* unknown url -> dashboard */}

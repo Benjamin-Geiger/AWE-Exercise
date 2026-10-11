@@ -16,7 +16,7 @@ const STEPS: HowToStep[] = [
     button: "Go to Evidence",
   },
   {
-    to: "/people",
+    to: "/team",
     title: "2. People & Locations",
     text: "Read profiles and statements from the six team members involved, and look up the six key locations in the investigation.",
     button: "Go to People & Locations",

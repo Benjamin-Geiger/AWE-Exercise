@@ -387,9 +387,14 @@ a:focus-visible {
 
 /* react app renders nav and navigation buttons as router links */
 a.nav-btn,
-a.btn {
+a.btn,
+a.tab-btn {
   display: inline-block;
   text-decoration: none;
+}
+
+a.tab-btn {
+  color: inherit;
 }
 
 /* Evidence grid */
