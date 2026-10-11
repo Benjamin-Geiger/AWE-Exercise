@@ -72,3 +72,13 @@ export interface TimelineEvent {
   locationIds: LocationId[];
   evidenceIds: EvidenceId[];
 }
+
+// data for the pages
+export interface CaseDataset {
+  caseData: CaseData;
+  people: Person[];
+  locations: CaseLocation[];
+  evidence: EvidenceItem[];
+  timeline: TimelineEvent[];
+  bookmarks: EvidenceId[];
+}

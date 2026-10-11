@@ -3,22 +3,12 @@ import { toEvidenceList } from "../shared/normalize.js";
 import { STORAGE_KEY_BOOKMARKS } from "../shared/storageKeys.js";
 import type {
   CaseData,
+  CaseDataset,
   CaseLocation,
   EvidenceId,
-  EvidenceItem,
   Person,
   TimelineEvent,
 } from "../types.js";
-
-// data for the pages
-export interface CaseDataset {
-  caseData: CaseData;
-  people: Person[];
-  locations: CaseLocation[];
-  evidence: EvidenceItem[];
-  timeline: TimelineEvent[];
-  bookmarks: EvidenceId[];
-}
 
 export type CaseDataState =
   | { status: "loading" }

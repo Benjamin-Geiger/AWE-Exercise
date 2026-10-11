@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { CaseDataset } from "../../app/useCaseData.js";
+import type { CaseDataset } from "../../types.js";
 import { CaseSummaryCard } from "./components/CaseSummaryCard.js";
 import { HowToGuide } from "./components/HowToGuide.js";
 import { RecentEvidenceList } from "./components/RecentEvidenceList.js";

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { CaseDataset } from "../../app/useCaseData.js";
+import type { CaseDataset } from "../../types.js";
 import { TimeLineList } from "./components/TimeLineList.js";
 
 interface TimeLinePageProps {

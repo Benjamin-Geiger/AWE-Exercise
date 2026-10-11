@@ -3,7 +3,7 @@ import { AppHeader } from "./AppHeader.js";
 import { LoadingOverlay } from "./LoadingOverlay.js";
 import { PlaceholderPage } from "./PlaceholderPage.js";
 import { useCaseData } from "./useCaseData.js";
-import type { CaseDataset } from "./useCaseData.js";
+import type { CaseDataset } from "../types.js";
 import { useHashRoute } from "./useHashRoute.js";
 import type { ViewName } from "./routes.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
