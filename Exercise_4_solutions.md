@@ -218,5 +218,46 @@ e.g PersonsCard, is only presentational but the Props are for Person data only. 
 
 Panel and MiniListItem, currently not shared but remain in shared for further use during migration. Their data contract is generic with no feature specific fields thus I didn't put them in a feature folder.
 
+# Demo 7
 
+Badge -> presentational element that only renders a span, no data access no state
 
+typed props -> BadgeProps, uses BadgeTone (neutral, positive, warning, critical) and string label.
+
+TimeLineEventCard -> Uses Badge to display the certainty (contradictory, reported, confirmed)
+RecentEvidenceList -> Uses badge to display status (neutral, positive, warning)
+
+Both use the same badge design, but choose the tone. None of the badges props are feature specific.
+
+## Q1
+
+TimeLineEventCard & RecentEvidenceList
+
+variations:
+label -> changes the text shown
+tone -> selects between 4 tones that correspond to different styles
+
+fixed:
+markup -> the span
+className -> badge
+mapping -> each tone coresponds to a CSS style
+
+Feature specific stays in its feature and uses thier own domain values to set the tones. Bagde never knows about status or certainty, it only gives the form and style.
+
+Only content that is really shared moves into the badge everything else is each features concern.
+
+## Q2
+
+In the vanilla app badge was build three times: app-old: 274, 406, 768
+Dashboard uses getStatusBadgeClass helper function
+Timeline uses certaintyBadgeClass helper
+Both use the same markup, but get different results through their helpers.
+
+New ver.:
+
+Single source of truth -> Changing the Badge only needs a change in Badge.tsx and all implementation of badge change. In the previous version youd have to change every badge independently.
+
+Typed contract -> explicit content contract ensures correct building of the badge, missing tone or label would be a compiler error.
+A typo in the html string of the old ver. would compile but might break the components content or visual.
+
+Composition instead of concatenation -> small independent components that can be combined, instead of extending an existing one.
