@@ -1,36 +1,34 @@
 import type { ReactElement } from "react";
-import type { ViewName } from "../../../app/routes.js";
-import { navigateTo } from "../../../app/useHashRoute.js";
+import { Link } from "react-router";
 
 interface HowToStep {
-  view: ViewName;
+  to: string;
   title: string;
   text: string;
   button: string;
 }
 
-// static copy, same text as the vanilla dashboard
 const STEPS: HowToStep[] = [
   {
-    view: "evidence",
+    to: "/evidence",
     title: "1. Evidence Catalogue",
     text: "Search, filter, and sort every evidence item. Open one for full details, related people and locations, and to add a private note.",
     button: "Go to Evidence",
   },
   {
-    view: "people",
+    to: "/people",
     title: "2. People & Locations",
     text: "Read profiles and statements from the six team members involved, and look up the six key locations in the investigation.",
     button: "Go to People & Locations",
   },
   {
-    view: "timeline",
+    to: "/timeline",
     title: "3. Timeline",
     text: "Walk through events in chronological order, filter by person, location, or type, and jump straight to the evidence behind any event.",
     button: "Go to Timeline",
   },
   {
-    view: "workspace",
+    to: "/workspace",
     title: "4. Investigator Workspace",
     text: "Your bookmarked evidence and notes collect here. Draft a hypothesis — who you suspect, why, and how confident you are — it's saved automatically in your browser.",
     button: "Go to Workspace",
@@ -47,16 +45,12 @@ export function HowToGuide(): ReactElement {
       </p>
       <div className="howto-grid">
         {STEPS.map((step) => (
-          <div key={step.view} className="howto-item">
+          <div key={step.to} className="howto-item">
             <h4>{step.title}</h4>
             <p>{step.text}</p>
-            <button
-              type="button"
-              className="btn btn-secondary btn-small"
-              onClick={() => navigateTo(step.view)}
-            >
+            <Link to={step.to} className="btn btn-secondary btn-small">
               {step.button}
-            </button>
+            </Link>
           </div>
         ))}
       </div>

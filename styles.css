@@ -385,6 +385,13 @@ a:focus-visible {
   font-size: 0.78rem;
 }
 
+/* react app renders nav and navigation buttons as router links */
+a.nav-btn,
+a.btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
 /* Evidence grid */
 .evidence-grid {
   display: grid;

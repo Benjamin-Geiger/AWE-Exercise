@@ -10,7 +10,12 @@ export function PersonCard({ person, evidenceCount }: PersonCardProps): ReactEle
   return (
     <div className="person-card">
       <div className="person-card-header">
-        <img className="person-avatar" src={person.avatar} alt={`Portrait of ${person.name}`} />
+        {/* avatar path is relative -> prefix with base */}
+        <img
+          className="person-avatar"
+          src={`${import.meta.env.BASE_URL}${person.avatar}`}
+          alt={`Portrait of ${person.name}`}
+        />
         <div>
           <h3>{person.name}</h3>
           <div className="person-role">{person.role}</div>

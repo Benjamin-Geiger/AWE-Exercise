@@ -1,12 +1,7 @@
 import type { ReactElement } from "react";
 import { MainNav } from "./MainNav.js";
-import type { ViewName } from "./routes.js";
 
-interface AppHeaderProps {
-  currentView: ViewName;
-}
-
-export function AppHeader({ currentView }: AppHeaderProps): ReactElement {
+export function AppHeader(): ReactElement {
   return (
     <header className="app-header">
       <div className="header-inner">
@@ -23,7 +18,7 @@ export function AppHeader({ currentView }: AppHeaderProps): ReactElement {
             </p>
           </div>
         </div>
-        <MainNav currentView={currentView} />
+        <MainNav />
       </div>
     </header>
   );

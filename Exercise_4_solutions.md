@@ -261,3 +261,6 @@ Typed contract -> explicit content contract ensures correct building of the badg
 A typo in the html string of the old ver. would compile but might break the components content or visual.
 
 Composition instead of concatenation -> small independent components that can be combined, instead of extending an existing one.
+
+# Demo 8
+

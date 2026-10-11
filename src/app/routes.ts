@@ -1,16 +1,10 @@
-// the five views, in nav order; same ids as the vanilla hashes
 export const VIEWS = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "evidence", label: "Evidence" },
-  { id: "people", label: "People & Locations" },
-  { id: "timeline", label: "Timeline" },
-  { id: "workspace", label: "Workspace" },
+  { path: "/", label: "Dashboard" },
+  { path: "/evidence", label: "Evidence" },
+  { path: "/people", label: "People & Locations" },
+  { path: "/timeline", label: "Timeline" },
+  { path: "/workspace", label: "Workspace" },
 ] as const;
 
-export type ViewName = (typeof VIEWS)[number]["id"];
-
-// unknown or empty hash -> to dashboard
-export function parseView(hash: string): ViewName {
-  const raw = hash.replace("#", "");
-  return VIEWS.find((v) => v.id === raw)?.id ?? "dashboard";
-}
+// react app at base/react,  vanilla app at base
+export const ROUTER_BASENAME = `${import.meta.env.BASE_URL}react`;
