@@ -5,7 +5,7 @@ interface PanelProps {
   children: ReactNode;
 }
 
-// titled wrapper: the panel owns the frame and heading, the caller supplies the content
+// the panel owns the frame and heading, the caller supplies the content
 export function Panel({ title, children }: PanelProps): ReactElement {
   return (
     <div className="dashboard-panel">

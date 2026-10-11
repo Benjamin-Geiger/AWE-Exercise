@@ -188,3 +188,35 @@ No changes in each component would affect the other, they only share currentView
 
 Navigation changes with every routing decision, the header stays the same
 
+# Demo 6
+
+## Q1
+
+By type -> files are grouped by theri technical role e.g components, hooks, utils etc., features could be spread acress several folders.
+
+By feature -> files grouped by domail capability e.g having timeline/ containing its page, components and helpers
+
+"A feature-oriented structure keeps code near the domain capability it supports."
+"keeps domain-specific components, types, and utilities close to the capability they support."
+"A flat directory works for a small prototype but becomes difficult when many files have generic names"
+
+app -> one feature folder for each of the 5 seperate views of the app
+-> provides good overview for each feature and keeps files close to the component that uses them
+-> changes stay local to their feature without touching other features
+
+## Q2
+
+Rule from the manuscript:
+"A component remains feature-local when its meaning and change reasons belong to one feature. It moves to shared only after it has a genuinely reusable contract."
+"Being presentational does not automatically make it shared." 
+
+Shared:
+E.g Badge is used by TimeLineEventCard for the certainty badge, and Dashboard uses it for CaseSummaryCard and RecentEvidenceList
+
+Feature-local:
+e.g PersonsCard, is only presentational but the Props are for Person data only. Its meaning is only relevant to People and Locations, and it would only be changed there.
+
+Panel and MiniListItem, currently not shared but remain in shared for further use during migration. Their data contract is generic with no feature specific fields thus I didn't put them in a feature folder.
+
+
+
