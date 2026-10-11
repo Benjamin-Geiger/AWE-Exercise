@@ -7,7 +7,7 @@ interface TimeLinePageProps {
 }
 
 export function TimeLinePage({ data }: TimeLinePageProps): ReactElement {
-  const { timeline, locations } = data;
+  const { timeline, locations, people } = data;
 
   const sortedEvents = [...timeline].sort(
     (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
@@ -16,7 +16,7 @@ export function TimeLinePage({ data }: TimeLinePageProps): ReactElement {
   return (
     <section>
       <h2>Investigation Timeline</h2>
-      <TimeLineList events={sortedEvents} locations={locations} />
+      <TimeLineList events={sortedEvents} locations={locations} people={people} />
     </section>
   );
 }

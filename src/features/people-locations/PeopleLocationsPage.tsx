@@ -3,6 +3,7 @@ import { Navigate, NavLink, Route, Routes } from "react-router";
 import type { CaseDataset } from "../../types.js";
 import { LocationCard } from "./components/LocationCard.js";
 import { PersonCard } from "./components/PersonCard.js";
+import { PersonDetailPage } from "./PersonDetailPage.js";
 
 interface PeopleLocationsPageProps {
   data: CaseDataset;
@@ -37,6 +38,10 @@ export function PeopleLocationsPage({ data }: PeopleLocationsPageProps): ReactEl
               ))}
             </div>
           }
+        />
+        <Route
+          path="people/:personId"
+          element={<PersonDetailPage people={people} evidence={evidence} />}
         />
         <Route
           path="locations"
