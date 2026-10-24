@@ -1,11 +1,11 @@
-import { useState, type ReactElement } from "react";
+import { useReducer, useState, type ReactElement } from "react";
 import { useSearchParams } from "react-router";
 import { readNotes, saveNotes } from "../../shared/storage.js";
 import type { CaseDataset, EvidenceId, EvidenceReview } from "../../types.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
 import { EvidenceToolbar } from "./components/EvidenceToolbar.js";
-import { EMPTY_FILTERS, selectVisibleEvidence, type EvidenceFilters } from "./evidenceFilters.js";
+import { EMPTY_FILTERS, filtersReducer, selectVisibleEvidence } from "./evidenceFilters.js";
 
 interface EvidencePageProps {
   data: CaseDataset;
@@ -24,21 +24,11 @@ export function EvidencePage({
 
   // from storage --> the page remounts on every visit
   const [notes, setNotes] = useState(readNotes);
-  // only filter inputs are state
-  const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [filters, dispatch] = useReducer(filtersReducer, EMPTY_FILTERS);
 
   // ?evidence=<id> opens detail, workspace links use it too
   const [searchParams, setSearchParams] = useSearchParams();
   const selected = evidence.find((ev) => ev.id === searchParams.get("evidence"));
-
-  function updateFilter<K extends keyof EvidenceFilters>(key: K, value: EvidenceFilters[K]): void {
-    setFilters((current) => ({ ...current, [key]: value }));
-  }
-
-  // resets every filter, keeps the sort order
-  function clearFilters(): void {
-    setFilters((current) => ({ ...EMPTY_FILTERS, sort: current.sort }));
-  }
 
   function handleSaveNote(id: EvidenceId, text: string): void {
     const next = { ...notes, [id]: text };
@@ -57,8 +47,7 @@ export function EvidencePage({
         people={people}
         locations={locations}
         filters={filters}
-        onFilterChange={updateFilter}
-        onClear={clearFilters}
+        dispatch={dispatch}
       />
       <div className="evidence-grid">
         {visibleEvidence.length === 0 && <p>No evidence matches the current filters.</p>}

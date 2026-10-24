@@ -34,6 +34,26 @@ export function toSortOrder(value: string): SortOrder {
   return SORT_OPTIONS.find((option) => option.value === value)?.value ?? "date-desc";
 }
 
+// every field except sort order is plain string filter
+export type FilterKey = Exclude<keyof EvidenceFilters, "sort">;
+
+export type FiltersAction =
+  | { type: "SET_FILTER"; key: FilterKey; value: string }
+  | { type: "SET_SORT"; sort: SortOrder }
+  | { type: "CLEAR_FILTERS" };
+
+// every allowed change to the filters in place -> always returns a new object
+export function filtersReducer(state: EvidenceFilters, action: FiltersAction): EvidenceFilters {
+  switch (action.type) {
+    case "SET_FILTER":
+      return { ...state, [action.key]: action.value };
+    case "SET_SORT":
+      return { ...state, sort: action.sort };
+    case "CLEAR_FILTERS":
+      return { ...EMPTY_FILTERS, sort: state.sort };
+  }
+}
+
 function matches(ev: EvidenceItem, filters: EvidenceFilters, term: string): boolean {
   const haystack = `${ev.title} ${ev.summary} ${ev.tags.join(" ")}`.toLowerCase();
   if (term && !haystack.includes(term)) return false;

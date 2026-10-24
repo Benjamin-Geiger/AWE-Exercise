@@ -1,14 +1,18 @@
-import type { ReactElement } from "react";
+import type { Dispatch, ReactElement } from "react";
 import type { CaseLocation, Person } from "../../../types.js";
-import { SORT_OPTIONS, toSortOrder, type EvidenceFilters } from "../evidenceFilters.js";
+import {
+  SORT_OPTIONS,
+  toSortOrder,
+  type EvidenceFilters,
+  type FiltersAction,
+} from "../evidenceFilters.js";
 
 interface EvidenceToolbarProps {
   evidenceTypes: string[];
   people: Person[];
   locations: CaseLocation[];
   filters: EvidenceFilters;
-  onFilterChange: <K extends keyof EvidenceFilters>(key: K, value: EvidenceFilters[K]) => void;
-  onClear: () => void;
+  dispatch: Dispatch<FiltersAction>;
 }
 
 export function EvidenceToolbar({
@@ -16,8 +20,7 @@ export function EvidenceToolbar({
   people,
   locations,
   filters,
-  onFilterChange,
-  onClear,
+  dispatch,
 }: EvidenceToolbarProps): ReactElement {
   return (
     <div className="toolbar">
@@ -28,10 +31,12 @@ export function EvidenceToolbar({
         <input
           type="text"
           id="evidenceSearch"
-          placeholder="Search evidence by title, summary, or tag…"
+          placeholder="Search evidence by title, summary, or tagâ€¦"
           autoComplete="off"
           value={filters.search}
-          onChange={(event) => onFilterChange("search", event.target.value)}
+          onChange={(event) =>
+            dispatch({ type: "SET_FILTER", key: "search", value: event.target.value })
+          }
         />
 
         <label htmlFor="filterType" className="visually-hidden">
@@ -40,7 +45,9 @@ export function EvidenceToolbar({
         <select
           id="filterType"
           value={filters.type}
-          onChange={(event) => onFilterChange("type", event.target.value)}
+          onChange={(event) =>
+            dispatch({ type: "SET_FILTER", key: "type", value: event.target.value })
+          }
         >
           <option value="">All types</option>
           {evidenceTypes.map((type) => (
@@ -56,7 +63,9 @@ export function EvidenceToolbar({
         <select
           id="filterPerson"
           value={filters.personId}
-          onChange={(event) => onFilterChange("personId", event.target.value)}
+          onChange={(event) =>
+            dispatch({ type: "SET_FILTER", key: "personId", value: event.target.value })
+          }
         >
           <option value="">All people</option>
           {people.map((person) => (
@@ -72,7 +81,9 @@ export function EvidenceToolbar({
         <select
           id="filterLocation"
           value={filters.locationId}
-          onChange={(event) => onFilterChange("locationId", event.target.value)}
+          onChange={(event) =>
+            dispatch({ type: "SET_FILTER", key: "locationId", value: event.target.value })
+          }
         >
           <option value="">All locations</option>
           {locations.map((location) => (
@@ -89,7 +100,9 @@ export function EvidenceToolbar({
         <select
           id="filterStatus"
           value={filters.status}
-          onChange={(event) => onFilterChange("status", event.target.value)}
+          onChange={(event) =>
+            dispatch({ type: "SET_FILTER", key: "status", value: event.target.value })
+          }
         >
           <option value="">All statuses</option>
           <option value="unreviewed">Unreviewed</option>
@@ -103,7 +116,9 @@ export function EvidenceToolbar({
         <select
           id="filterRelevance"
           value={filters.relevance}
-          onChange={(event) => onFilterChange("relevance", event.target.value)}
+          onChange={(event) =>
+            dispatch({ type: "SET_FILTER", key: "relevance", value: event.target.value })
+          }
         >
           <option value="">All relevance</option>
           <option value="unknown">Unknown</option>
@@ -117,7 +132,9 @@ export function EvidenceToolbar({
         <select
           id="sortEvidence"
           value={filters.sort}
-          onChange={(event) => onFilterChange("sort", toSortOrder(event.target.value))}
+          onChange={(event) =>
+            dispatch({ type: "SET_SORT", sort: toSortOrder(event.target.value) })
+          }
         >
           {SORT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -126,7 +143,11 @@ export function EvidenceToolbar({
           ))}
         </select>
 
-        <button type="button" className="btn btn-secondary" onClick={onClear}>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => dispatch({ type: "CLEAR_FILTERS" })}
+        >
           Clear filters
         </button>
       </div>
