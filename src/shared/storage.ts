@@ -1,4 +1,4 @@
-// localStorage access for the React app, same keys and formats as the vanilla app
+// localStorage access for React app
 import { STORAGE_KEY_BOOKMARKS, STORAGE_KEY_HYPOTHESIS, STORAGE_KEY_NOTES } from "./storageKeys.js";
 import type { EvidenceId, PersonId } from "../types.js";
 
@@ -26,7 +26,7 @@ export function readBookmarks(): EvidenceId[] {
   return Array.isArray(parsed) ? parsed.map(String) : [];
 }
 
-export function saveBookmarks(ids: EvidenceId[]): void {
+export function saveBookmarks(ids: readonly EvidenceId[]): void {
   localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(ids));
 }
 

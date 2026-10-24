@@ -10,11 +10,17 @@ interface EvidencePageProps {
   data: CaseDataset;
 }
 
+// returns a new array on add and remove
+// vanilla version did -> bookmarks.push(id) + ev.bookmarked = true)
+function toggleBookmark(ids: readonly EvidenceId[], id: EvidenceId): readonly EvidenceId[] {
+  return ids.includes(id) ? ids.filter((b) => b !== id) : [...ids, id];
+}
+
 export function EvidencePage({ data }: EvidencePageProps): ReactElement {
   const { evidence, people, locations } = data;
 
   // from storage --> the page remounts on every visit
-  const [bookmarks, setBookmarks] = useState(readBookmarks);
+  const [bookmarks, setBookmarks] = useState<readonly EvidenceId[]>(readBookmarks);
   const [notes, setNotes] = useState(readNotes);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -23,7 +29,11 @@ export function EvidencePage({ data }: EvidencePageProps): ReactElement {
   const selected = evidence.find((ev) => ev.id === searchParams.get("evidence"));
 
   function handleToggleBookmark(id: EvidenceId): void {
-    const next = bookmarks.includes(id) ? bookmarks.filter((b) => b !== id) : [...bookmarks, id];
+    const next = toggleBookmark(bookmarks, id);
+    // React stops render if it gets same array -> star wouldnt update
+    if (import.meta.env.DEV) {
+      console.assert(next !== bookmarks, "toggleBookmark must return new array");
+    }
     setBookmarks(next);
     saveBookmarks(next);
   }
