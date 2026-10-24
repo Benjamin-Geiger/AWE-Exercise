@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toEvidenceList } from "../shared/normalize.js";
-import { readBookmarks } from "../shared/storage.js";
 import type { CaseData, CaseDataset, CaseLocation, Person, TimelineEvent } from "../types.js";
 
 export type CaseDataState =
@@ -32,7 +31,6 @@ async function loadCaseDataset(): Promise<CaseDataset> {
     locations: locationsJson as CaseLocation[],
     evidence: toEvidenceList(evidenceJson, people),
     timeline: timelineJson as TimelineEvent[],
-    bookmarks: readBookmarks(),
   };
 }
 

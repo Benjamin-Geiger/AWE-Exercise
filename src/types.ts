@@ -80,5 +80,4 @@ export interface CaseDataset {
   locations: CaseLocation[];
   evidence: EvidenceItem[];
   timeline: TimelineEvent[];
-  bookmarks: EvidenceId[];
 }

@@ -1,41 +1,41 @@
 import { useState, type ReactElement } from "react";
 import { useSearchParams } from "react-router";
-import { readBookmarks, readNotes, saveBookmarks, saveNotes } from "../../shared/storage.js";
+import { readNotes, saveNotes } from "../../shared/storage.js";
 import type { CaseDataset, EvidenceId } from "../../types.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
 import { EvidenceToolbar } from "./components/EvidenceToolbar.js";
+import { EMPTY_FILTERS, selectVisibleEvidence, type EvidenceFilters } from "./evidenceFilters.js";
 
 interface EvidencePageProps {
   data: CaseDataset;
+  bookmarks: readonly EvidenceId[];
+  onToggleBookmark: (id: EvidenceId) => void;
 }
 
-// returns a new array on add and remove
-// vanilla version did -> bookmarks.push(id) + ev.bookmarked = true)
-function toggleBookmark(ids: readonly EvidenceId[], id: EvidenceId): readonly EvidenceId[] {
-  return ids.includes(id) ? ids.filter((b) => b !== id) : [...ids, id];
-}
-
-export function EvidencePage({ data }: EvidencePageProps): ReactElement {
+export function EvidencePage({
+  data,
+  bookmarks,
+  onToggleBookmark,
+}: EvidencePageProps): ReactElement {
   const { evidence, people, locations } = data;
 
   // from storage --> the page remounts on every visit
-  const [bookmarks, setBookmarks] = useState<readonly EvidenceId[]>(readBookmarks);
   const [notes, setNotes] = useState(readNotes);
-  const [searchTerm, setSearchTerm] = useState("");
+  // only filter inputs are state
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
 
   // ?evidence=<id> opens detail, workspace links use it too
   const [searchParams, setSearchParams] = useSearchParams();
   const selected = evidence.find((ev) => ev.id === searchParams.get("evidence"));
 
-  function handleToggleBookmark(id: EvidenceId): void {
-    const next = toggleBookmark(bookmarks, id);
-    // React stops render if it gets same array -> star wouldnt update
-    if (import.meta.env.DEV) {
-      console.assert(next !== bookmarks, "toggleBookmark must return new array");
-    }
-    setBookmarks(next);
-    saveBookmarks(next);
+  function updateFilter<K extends keyof EvidenceFilters>(key: K, value: EvidenceFilters[K]): void {
+    setFilters((current) => ({ ...current, [key]: value }));
+  }
+
+  // resets every filter, keeps the sort order
+  function clearFilters(): void {
+    setFilters((current) => ({ ...EMPTY_FILTERS, sort: current.sort }));
   }
 
   function handleSaveNote(id: EvidenceId, text: string): void {
@@ -44,12 +44,7 @@ export function EvidencePage({ data }: EvidencePageProps): ReactElement {
     saveNotes(next);
   }
 
-  // filter() returns new array --> so sort() never reorders data.evidence
-  const term = searchTerm.toLowerCase().trim();
-  const visibleEvidence = evidence
-    .filter((ev) => `${ev.title} ${ev.summary} ${ev.tags.join(" ")}`.toLowerCase().includes(term))
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-
+  const visibleEvidence = selectVisibleEvidence(evidence, filters);
   const evidenceTypes = [...new Set(evidence.map((ev) => ev.type.toLowerCase()))];
 
   return (
@@ -59,8 +54,9 @@ export function EvidencePage({ data }: EvidencePageProps): ReactElement {
         evidenceTypes={evidenceTypes}
         people={people}
         locations={locations}
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
+        filters={filters}
+        onFilterChange={updateFilter}
+        onClear={clearFilters}
       />
       <div className="evidence-grid">
         {visibleEvidence.length === 0 && <p>No evidence matches the current filters.</p>}
@@ -70,7 +66,7 @@ export function EvidencePage({ data }: EvidencePageProps): ReactElement {
             item={ev}
             isBookmarked={bookmarks.includes(ev.id)}
             onOpen={(id) => setSearchParams({ evidence: id })}
-            onToggleBookmark={handleToggleBookmark}
+            onToggleBookmark={onToggleBookmark}
           />
         ))}
       </div>

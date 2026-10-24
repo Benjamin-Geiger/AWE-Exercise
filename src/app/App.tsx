@@ -1,9 +1,10 @@
-import type { ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AppHeader } from "./AppHeader.js";
 import { LoadingOverlay } from "./LoadingOverlay.js";
 import { useCaseData } from "./useCaseData.js";
-import type { CaseDataset } from "../types.js";
+import { readBookmarks, saveBookmarks } from "../shared/storage.js";
+import type { CaseDataset, EvidenceId } from "../types.js";
 import { ROUTER_BASENAME } from "./routes.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
 import { EvidencePage } from "../features/evidence/EvidencePage.js";
@@ -15,15 +16,39 @@ interface AppRoutesProps {
   data: CaseDataset;
 }
 
+// returns new array on add and remove
+// vanilla version did -> bookmarks.push(id) + ev.bookmarked = true)
+function toggleBookmark(ids: readonly EvidenceId[], id: EvidenceId): readonly EvidenceId[] {
+  return ids.includes(id) ? ids.filter((b) => b !== id) : [...ids, id];
+}
+
 function AppRoutes({ data }: AppRoutesProps): ReactElement {
+  // single source of truth for bookmarks
+  const [bookmarks, setBookmarks] = useState<readonly EvidenceId[]>(readBookmarks);
+
+  function handleToggleBookmark(id: EvidenceId): void {
+    const next = toggleBookmark(bookmarks, id);
+    // React stops render if it gets same array -> star wouldnt update
+    if (import.meta.env.DEV) {
+      console.assert(next !== bookmarks, "toggleBookmark must return new array");
+    }
+    setBookmarks(next);
+    saveBookmarks(next);
+  }
+
   return (
     <Routes>
-      <Route index element={<DashboardPage data={data} />} />
-      <Route path="evidence" element={<EvidencePage data={data} />} />
+      <Route index element={<DashboardPage data={data} bookmarks={bookmarks} />} />
+      <Route
+        path="evidence"
+        element={
+          <EvidencePage data={data} bookmarks={bookmarks} onToggleBookmark={handleToggleBookmark} />
+        }
+      />
       {/* team/* -> page defines its own tab routes */}
       <Route path="team/*" element={<PeopleLocationsPage data={data} />} />
       <Route path="timeline" element={<TimeLinePage data={data} />} />
-      <Route path="workspace" element={<WorkspacePage data={data} />} />
+      <Route path="workspace" element={<WorkspacePage data={data} bookmarks={bookmarks} />} />
       {/* unknown url -> dashboard */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
