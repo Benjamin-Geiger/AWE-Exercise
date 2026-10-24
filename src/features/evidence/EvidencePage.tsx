@@ -49,6 +49,7 @@ export function EvidencePage({ data }: EvidencePageProps): ReactElement {
         evidenceTypes={evidenceTypes}
         people={people}
         locations={locations}
+        searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
       />
       <div className="evidence-grid">

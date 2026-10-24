@@ -5,6 +5,7 @@ interface EvidenceToolbarProps {
   evidenceTypes: string[];
   people: Person[];
   locations: CaseLocation[];
+  searchTerm: string;
   onSearchChange: (term: string) => void;
 }
 
@@ -12,6 +13,7 @@ export function EvidenceToolbar({
   evidenceTypes,
   people,
   locations,
+  searchTerm,
   onSearchChange,
 }: EvidenceToolbarProps): ReactElement {
   return (
@@ -25,6 +27,7 @@ export function EvidenceToolbar({
           id="evidenceSearch"
           placeholder="Search evidence by title, summary, or tag…"
           autoComplete="off"
+          value={searchTerm}
           onChange={(event) => onSearchChange(event.target.value)}
         />
 
