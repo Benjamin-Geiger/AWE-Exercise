@@ -2,13 +2,14 @@ import type { ReactElement } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AppHeader } from "./AppHeader.js";
 import { LoadingOverlay } from "./LoadingOverlay.js";
-import { PlaceholderPage } from "./PlaceholderPage.js";
 import { useCaseData } from "./useCaseData.js";
 import type { CaseDataset } from "../types.js";
 import { ROUTER_BASENAME } from "./routes.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
+import { EvidencePage } from "../features/evidence/EvidencePage.js";
 import { PeopleLocationsPage } from "../features/people-locations/PeopleLocationsPage.js";
 import { TimeLinePage } from "../features/timeline/TimeLinePage.js";
+import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 
 interface AppRoutesProps {
   data: CaseDataset;
@@ -18,11 +19,11 @@ function AppRoutes({ data }: AppRoutesProps): ReactElement {
   return (
     <Routes>
       <Route index element={<DashboardPage data={data} />} />
-      <Route path="evidence" element={<PlaceholderPage title="Evidence Catalogue" />} />
+      <Route path="evidence" element={<EvidencePage data={data} />} />
       {/* team/* -> page defines its own tab routes */}
       <Route path="team/*" element={<PeopleLocationsPage data={data} />} />
       <Route path="timeline" element={<TimeLinePage data={data} />} />
-      <Route path="workspace" element={<PlaceholderPage title="Investigator Workspace" />} />
+      <Route path="workspace" element={<WorkspacePage data={data} />} />
       {/* unknown url -> dashboard */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

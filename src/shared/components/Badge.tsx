@@ -1,13 +1,13 @@
 import type { ReactElement } from "react";
 
-export type BadgeTone = "neutral" | "positive" | "warning" | "critical";
+export type BadgeTone = "neutral" | "positive" | "warning" | "critical" | "info";
 
-// tones map existing badge tones fron stylesheet
 const TONE_CLASS: Record<BadgeTone, string> = {
   neutral: "badge-unreviewed",
   positive: "badge-reviewed",
   warning: "badge-flagged",
   critical: "badge-critical",
+  info: "badge-relevant",
 };
 
 interface BadgeProps {

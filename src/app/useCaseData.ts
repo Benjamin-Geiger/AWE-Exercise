@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { toEvidenceList } from "../shared/normalize.js";
-import { STORAGE_KEY_BOOKMARKS } from "../shared/storageKeys.js";
-import type {
-  CaseData,
-  CaseDataset,
-  CaseLocation,
-  EvidenceId,
-  Person,
-  TimelineEvent,
-} from "../types.js";
+import { readBookmarks } from "../shared/storage.js";
+import type { CaseData, CaseDataset, CaseLocation, Person, TimelineEvent } from "../types.js";
 
 export type CaseDataState =
   | { status: "loading" }
@@ -20,16 +13,6 @@ async function fetchJson(file: string): Promise<unknown> {
   const res = await fetch(`${import.meta.env.BASE_URL}data/${file}`);
   if (!res.ok) throw new Error(`${file} could not be loaded (HTTP ${res.status})`);
   return await res.json();
-}
-
-function readBookmarks(): EvidenceId[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_BOOKMARKS);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.map(String) : [];
-  } catch {
-    return [];
-  }
 }
 
 async function loadCaseDataset(): Promise<CaseDataset> {
