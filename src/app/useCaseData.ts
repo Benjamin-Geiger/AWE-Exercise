@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { toEvidenceList } from "../shared/normalize.js";
-import type { CaseData, CaseDataset, CaseLocation, Person, TimelineEvent } from "../types.js";
+import type {
+  CaseData,
+  CaseDataset,
+  CaseLocation,
+  EvidenceId,
+  EvidenceReview,
+  Person,
+  TimelineEvent,
+} from "../types.js";
 
 export type CaseDataState =
   | { status: "loading" }
@@ -34,8 +42,23 @@ async function loadCaseDataset(): Promise<CaseDataset> {
   };
 }
 
-export function useCaseData(): CaseDataState {
+export function useCaseData(): readonly [
+  CaseDataState,
+  (id: EvidenceId, review: EvidenceReview) => void,
+] {
   const [state, setState] = useState<CaseDataState>({ status: "loading" });
+
+  // only the owner changes loaded evidence: new array, new object for the changed item
+  // (vanilla did ev.status = value on the shared object)
+  function updateEvidenceReview(id: EvidenceId, review: EvidenceReview): void {
+    setState((current) => {
+      if (current.status !== "ready") return current;
+      const evidence = current.data.evidence.map((ev) =>
+        ev.id === id ? { ...ev, ...review } : ev,
+      );
+      return { ...current, data: { ...current.data, evidence } };
+    });
+  }
 
   useEffect(() => {
     // ignore a result that arrives after unmount (StrictMode runs effects twice in dev)
@@ -52,5 +75,5 @@ export function useCaseData(): CaseDataState {
     };
   }, []);
 
-  return state;
+  return [state, updateEvidenceReview];
 }

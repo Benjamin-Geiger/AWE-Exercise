@@ -6,12 +6,12 @@ import type { Evidence, EvidenceRelevance, EvidenceStatus, Person, PersonId } fr
 const STATUSES: EvidenceStatus[] = ["unreviewed", "reviewed", "flagged"];
 const RELEVANCES: EvidenceRelevance[] = ["unknown", "relevant", "irrelevant"];
 
-function toStatus(value: unknown): EvidenceStatus {
+export function toStatus(value: unknown): EvidenceStatus {
   const s = String(value).toLowerCase();
   return STATUSES.find((v) => v === s) ?? "unreviewed";
 }
 
-function toRelevance(value: unknown): EvidenceRelevance {
+export function toRelevance(value: unknown): EvidenceRelevance {
   const r = String(value).toLowerCase();
   return RELEVANCES.find((v) => v === r) ?? "unknown";
 }

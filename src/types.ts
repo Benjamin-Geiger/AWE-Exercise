@@ -43,6 +43,9 @@ export interface EvidenceItem extends Evidence {
   bookmarked?: boolean;
 }
 
+// fields the detail view may change
+export type EvidenceReview = Partial<Pick<Evidence, "status" | "relevance">>;
+
 export interface Person {
   id: PersonId;
   name: string;

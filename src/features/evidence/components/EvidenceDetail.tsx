@@ -1,6 +1,13 @@
 import { useState, type ReactElement } from "react";
 import { formatDate } from "../../../shared/format/dates.js";
-import type { CaseLocation, EvidenceId, EvidenceItem, Person } from "../../../types.js";
+import { toRelevance, toStatus } from "../../../shared/normalize.js";
+import type {
+  CaseLocation,
+  EvidenceId,
+  EvidenceItem,
+  EvidenceReview,
+  Person,
+} from "../../../types.js";
 
 interface EvidenceDetailProps {
   item: EvidenceItem;
@@ -9,6 +16,7 @@ interface EvidenceDetailProps {
   savedNote: string;
   onClose: () => void;
   onSaveNote: (id: EvidenceId, text: string) => void;
+  onReviewChange: (id: EvidenceId, review: EvidenceReview) => void;
 }
 
 export function EvidenceDetail({
@@ -18,6 +26,7 @@ export function EvidenceDetail({
   savedNote,
   onClose,
   onSaveNote,
+  onReviewChange,
 }: EvidenceDetailProps): ReactElement {
   // starts from saved note & parent passes item.id, resets per item
   const [draft, setDraft] = useState(savedNote);
@@ -70,7 +79,11 @@ export function EvidenceDetail({
 
       <div className="detail-field">
         <strong>Review status</strong>
-        <select defaultValue={item.status}>
+        {/* controlled by owner's evidence state, change is only a request to it */}
+        <select
+          value={item.status}
+          onChange={(event) => onReviewChange(item.id, { status: toStatus(event.target.value) })}
+        >
           <option value="unreviewed">Unreviewed</option>
           <option value="reviewed">Reviewed</option>
           <option value="flagged">Flagged</option>
@@ -78,7 +91,12 @@ export function EvidenceDetail({
       </div>
       <div className="detail-field">
         <strong>Relevance</strong>
-        <select defaultValue={item.relevance}>
+        <select
+          value={item.relevance}
+          onChange={(event) =>
+            onReviewChange(item.id, { relevance: toRelevance(event.target.value) })
+          }
+        >
           <option value="unknown">Unknown</option>
           <option value="relevant">Relevant</option>
           <option value="irrelevant">Irrelevant</option>

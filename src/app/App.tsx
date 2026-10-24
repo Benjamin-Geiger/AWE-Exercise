@@ -4,7 +4,7 @@ import { AppHeader } from "./AppHeader.js";
 import { LoadingOverlay } from "./LoadingOverlay.js";
 import { useCaseData } from "./useCaseData.js";
 import { readBookmarks, saveBookmarks } from "../shared/storage.js";
-import type { CaseDataset, EvidenceId } from "../types.js";
+import type { CaseDataset, EvidenceId, EvidenceReview } from "../types.js";
 import { ROUTER_BASENAME } from "./routes.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
 import { EvidencePage } from "../features/evidence/EvidencePage.js";
@@ -14,6 +14,7 @@ import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 
 interface AppRoutesProps {
   data: CaseDataset;
+  onReviewChange: (id: EvidenceId, review: EvidenceReview) => void;
 }
 
 // returns new array on add and remove
@@ -22,7 +23,7 @@ function toggleBookmark(ids: readonly EvidenceId[], id: EvidenceId): readonly Ev
   return ids.includes(id) ? ids.filter((b) => b !== id) : [...ids, id];
 }
 
-function AppRoutes({ data }: AppRoutesProps): ReactElement {
+function AppRoutes({ data, onReviewChange }: AppRoutesProps): ReactElement {
   // single source of truth for bookmarks
   const [bookmarks, setBookmarks] = useState<readonly EvidenceId[]>(readBookmarks);
 
@@ -42,7 +43,12 @@ function AppRoutes({ data }: AppRoutesProps): ReactElement {
       <Route
         path="evidence"
         element={
-          <EvidencePage data={data} bookmarks={bookmarks} onToggleBookmark={handleToggleBookmark} />
+          <EvidencePage
+            data={data}
+            bookmarks={bookmarks}
+            onToggleBookmark={handleToggleBookmark}
+            onReviewChange={onReviewChange}
+          />
         }
       />
       {/* team/* -> page defines its own tab routes */}
@@ -57,7 +63,7 @@ function AppRoutes({ data }: AppRoutesProps): ReactElement {
 
 export function App(): ReactElement {
   // loaded  here to survives navigation
-  const caseState = useCaseData();
+  const [caseState, updateEvidenceReview] = useCaseData();
 
   return (
     <BrowserRouter basename={ROUTER_BASENAME}>
@@ -67,7 +73,9 @@ export function App(): ReactElement {
         {caseState.status === "error" && (
           <p role="alert">The case file could not be loaded: {caseState.message}</p>
         )}
-        {caseState.status === "ready" && <AppRoutes data={caseState.data} />}
+        {caseState.status === "ready" && (
+          <AppRoutes data={caseState.data} onReviewChange={updateEvidenceReview} />
+        )}
       </main>
       <footer className="app-footer">
         <p>Project ReMotion Investigation Portal</p>

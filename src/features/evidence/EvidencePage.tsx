@@ -1,7 +1,7 @@
 import { useState, type ReactElement } from "react";
 import { useSearchParams } from "react-router";
 import { readNotes, saveNotes } from "../../shared/storage.js";
-import type { CaseDataset, EvidenceId } from "../../types.js";
+import type { CaseDataset, EvidenceId, EvidenceReview } from "../../types.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
 import { EvidenceToolbar } from "./components/EvidenceToolbar.js";
@@ -11,12 +11,14 @@ interface EvidencePageProps {
   data: CaseDataset;
   bookmarks: readonly EvidenceId[];
   onToggleBookmark: (id: EvidenceId) => void;
+  onReviewChange: (id: EvidenceId, review: EvidenceReview) => void;
 }
 
 export function EvidencePage({
   data,
   bookmarks,
   onToggleBookmark,
+  onReviewChange,
 }: EvidencePageProps): ReactElement {
   const { evidence, people, locations } = data;
 
@@ -79,6 +81,7 @@ export function EvidencePage({
           savedNote={notes[selected.id] ?? ""}
           onClose={() => setSearchParams({})}
           onSaveNote={handleSaveNote}
+          onReviewChange={onReviewChange}
         />
       )}
     </section>
