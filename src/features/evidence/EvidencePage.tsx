@@ -1,5 +1,6 @@
 import { useReducer, useState, type ReactElement } from "react";
 import { useSearchParams } from "react-router";
+import { useBookmarks } from "../../shared/BookmarkContext.js";
 import { readNotes, saveNotes } from "../../shared/storage.js";
 import type { CaseDataset, EvidenceId, EvidenceReview } from "../../types.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
@@ -9,18 +10,13 @@ import { EMPTY_FILTERS, filtersReducer, selectVisibleEvidence } from "./evidence
 
 interface EvidencePageProps {
   data: CaseDataset;
-  bookmarks: readonly EvidenceId[];
-  onToggleBookmark: (id: EvidenceId) => void;
   onReviewChange: (id: EvidenceId, review: EvidenceReview) => void;
 }
 
-export function EvidencePage({
-  data,
-  bookmarks,
-  onToggleBookmark,
-  onReviewChange,
-}: EvidencePageProps): ReactElement {
+export function EvidencePage({ data, onReviewChange }: EvidencePageProps): ReactElement {
   const { evidence, people, locations } = data;
+  // the page reads the context -> cards stay props only components
+  const { bookmarks, toggleBookmark } = useBookmarks();
 
   // from storage --> the page remounts on every visit
   const [notes, setNotes] = useState(readNotes);
@@ -57,7 +53,7 @@ export function EvidencePage({
             item={ev}
             isBookmarked={bookmarks.includes(ev.id)}
             onOpen={(id) => setSearchParams({ evidence: id })}
-            onToggleBookmark={onToggleBookmark}
+            onToggleBookmark={toggleBookmark}
           />
         ))}
       </div>

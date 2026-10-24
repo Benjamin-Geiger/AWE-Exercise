@@ -2,16 +2,17 @@ import { useState, type ReactElement } from "react";
 import { Link } from "react-router";
 import { MiniListItem } from "../../shared/components/MiniListItem.js";
 import { readNotes } from "../../shared/storage.js";
-import type { CaseDataset, EvidenceId } from "../../types.js";
+import { useBookmarks } from "../../shared/BookmarkContext.js";
+import type { CaseDataset } from "../../types.js";
 import { HypothesisForm } from "./components/HypothesisForm.js";
 
 interface WorkspacePageProps {
   data: CaseDataset;
-  bookmarks: readonly EvidenceId[];
 }
 
-export function WorkspacePage({ data, bookmarks }: WorkspacePageProps): ReactElement {
+export function WorkspacePage({ data }: WorkspacePageProps): ReactElement {
   const { evidence, people } = data;
+  const { bookmarks } = useBookmarks();
 
   // read once per visit -> evidence page writes notes to storage
   const [notes] = useState(readNotes);
