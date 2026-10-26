@@ -1,6 +1,5 @@
 import type { ReactElement } from "react";
-import { useBookmarks } from "../../shared/BookmarkContext.js";
-import type { CaseDataset } from "../../types.js";
+import type { CaseDataset, EvidenceId } from "../../types.js";
 import { CaseSummaryCard } from "./components/CaseSummaryCard.js";
 import { HowToGuide } from "./components/HowToGuide.js";
 import { RecentEvidenceList } from "./components/RecentEvidenceList.js";
@@ -10,11 +9,11 @@ import { StatCard } from "./components/StatCard.js";
 
 interface DashboardPageProps {
   data: CaseDataset;
+  bookmarks: readonly EvidenceId[];
 }
 
-export function DashboardPage({ data }: DashboardPageProps): ReactElement {
+export function DashboardPage({ data, bookmarks }: DashboardPageProps): ReactElement {
   const { caseData, evidence, people, locations, timeline } = data;
-  const { bookmarks } = useBookmarks();
 
   // derived values: recalculated from the current data on every render
   const reviewedCount = evidence.filter((ev) => ev.status === "reviewed").length;

@@ -1,7 +1,5 @@
-import { useReducer, useState, type ReactElement } from "react";
+import { useReducer, type ReactElement } from "react";
 import { useSearchParams } from "react-router";
-import { useBookmarks } from "../../shared/BookmarkContext.js";
-import { readNotes, saveNotes } from "../../shared/storage.js";
 import type { CaseDataset, EvidenceId, EvidenceReview } from "../../types.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
@@ -10,27 +8,27 @@ import { EMPTY_FILTERS, filtersReducer, selectVisibleEvidence } from "./evidence
 
 interface EvidencePageProps {
   data: CaseDataset;
+  bookmarks: readonly EvidenceId[];
+  notes: Record<EvidenceId, string>;
+  onToggleBookmark: (id: EvidenceId) => void;
+  onSaveNote: (id: EvidenceId, text: string) => void;
   onReviewChange: (id: EvidenceId, review: EvidenceReview) => void;
 }
 
-export function EvidencePage({ data, onReviewChange }: EvidencePageProps): ReactElement {
+export function EvidencePage({
+  data,
+  bookmarks,
+  notes,
+  onToggleBookmark,
+  onSaveNote,
+  onReviewChange,
+}: EvidencePageProps): ReactElement {
   const { evidence, people, locations } = data;
-  // the page reads the context -> cards stay props only components
-  const { bookmarks, toggleBookmark } = useBookmarks();
-
-  // from storage --> the page remounts on every visit
-  const [notes, setNotes] = useState(readNotes);
   const [filters, dispatch] = useReducer(filtersReducer, EMPTY_FILTERS);
 
   // ?evidence=<id> opens detail, workspace links use it too
   const [searchParams, setSearchParams] = useSearchParams();
   const selected = evidence.find((ev) => ev.id === searchParams.get("evidence"));
-
-  function handleSaveNote(id: EvidenceId, text: string): void {
-    const next = { ...notes, [id]: text };
-    setNotes(next);
-    saveNotes(next);
-  }
 
   const visibleEvidence = selectVisibleEvidence(evidence, filters);
   const evidenceTypes = [...new Set(evidence.map((ev) => ev.type.toLowerCase()))];
@@ -53,7 +51,7 @@ export function EvidencePage({ data, onReviewChange }: EvidencePageProps): React
             item={ev}
             isBookmarked={bookmarks.includes(ev.id)}
             onOpen={(id) => setSearchParams({ evidence: id })}
-            onToggleBookmark={toggleBookmark}
+            onToggleBookmark={onToggleBookmark}
           />
         ))}
       </div>
@@ -65,7 +63,7 @@ export function EvidencePage({ data, onReviewChange }: EvidencePageProps): React
           locations={locations}
           savedNote={notes[selected.id] ?? ""}
           onClose={() => setSearchParams({})}
-          onSaveNote={handleSaveNote}
+          onSaveNote={onSaveNote}
           onReviewChange={onReviewChange}
         />
       )}
